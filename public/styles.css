@@ -1,0 +1,326 @@
+body{
+  margin: 0px 0px 0px 0px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+section.container{
+  max-width: 1560px;
+  /*background-color: #eee;*/
+  display: flex;
+
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 800px;
+  overflow: hidden;
+}
+
+aside{
+  order: 2;
+  width: 400px;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.row{
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+}
+
+.icon-box{
+  min-width: 150px;
+  max-width: 150px;
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+}
+
+.top-icon-box{
+  justify-content: space-between;
+}
+
+.nav{
+  cursor: pointer;
+  color: #4285f4;
+}
+
+.nav a{
+  border-bottom:1px dashed #4285f4;
+}
+
+.nav-toggle-select{
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.nav-toggle-info{
+  width: 40px;
+  text-align: center;
+}
+
+.select-buttons{
+  padding-left: 10px;
+}
+
+.select{
+  margin: 0px 10px 0px 10px;
+
+}
+
+.chart{
+/*  display: flex;
+  flex-direction: column;
+*/  height: calc(100vh - 50px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.hero-selection{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-selection .weapon-element{
+  cursor: pointer;
+  margin: 3px;
+  border-radius: 5px;
+}
+
+.hero-selection .weapon-element:hover{
+  border: #888 2px solid;
+  margin: 1px;
+}
+
+.hero-selection-row{
+  display: none;
+}
+
+.timeline-box{
+  width: calc(100% - 100px);
+  min-height: 20px;
+}
+
+svg.timeScale{
+  height: 32px;
+}
+
+svg.timeline-box{
+  min-width: 800px;
+  max-width: 800px;
+  transition: height 0.1s;
+}
+
+.icons{
+  min-width: 100px;
+  max-width: 100px;
+  display: flex;
+}
+
+.inverse img{
+  -webkit-filter: contrast(0%);
+  filter: contrast(0%);
+}
+
+.inverse .ability-mousebutton{
+  color: #888;
+}
+
+div.info-string{
+  text-align: right;
+  min-width: 50px;
+  max-width: 50px;
+  color: white;
+  left: 100px;
+}
+
+.hero-ability-icon-bg{
+  position: relative;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  background-color: rgba(64,82,117,0);
+
+  -webkit-user-select: none;
+          user-select: none;
+}
+
+.ability-mousebutton{
+  position: absolute;
+  left:70%;
+  top:5%;
+  color: white;
+  font-family: sans-serif;
+  font-size: 10px;
+}
+
+.hero-ability-icon{
+  width: auto;
+  height: auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  max-height: 65%;
+  max-width: 90%;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  vertical-align: center;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  /*border-radius: 8px;*/
+  pointer-events: none;
+}
+
+.hero-slider{
+  position: relative;
+  background-color: rgba(255,255,255,0.5);
+  height: 10px;
+  width: 110px;
+  margin-left: -110px;
+  align-self: flex-end;
+  font-family: sans-serif;
+  font-size: 11px;
+  line-height: 11px;
+  text-align: center;
+}
+
+.hero-slider-help-string{
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  height: 10px;
+  width: 110px;
+  margin-bottom: -10px;
+
+  color: #888;
+  font-size: 8px;
+  line-height: 9px;
+}
+
+.hero-slider-handle{
+  background-color: rgba(0,0,0,0.5);;
+  color: #fff;
+  height: 10px;
+  width: 20px;
+  margin: 0px;
+  cursor: pointer;
+}
+
+.distance-panel p{
+  padding: 0px 20px 0px 20px;
+  font-family: serif;
+  font-size: 16px;
+
+}
+
+input.distance-input{
+  width: 40px;
+  text-align: right;
+  font-family: serif;
+  font-size: 16px;
+}
+
+.modificators{
+  /*background-color: #eee;*/
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.modificators p{
+  margin: 3px 0px 3px 0px;
+  text-align: center;
+}
+
+.mod-reduction{
+  width: 150px;
+}
+
+.mod-boost{
+  width: 250px;
+}
+
+.mod-icon-box{
+  justify-content: center;
+  max-width: 1000px;
+}
+
+.mod-panel .hero-ability-icon-bg{
+  margin: 1px 3px 1px 3px;
+  cursor: pointer;
+}
+
+.mod-panel .hero-ability-icon-bg:hover{
+  border: #888 1px solid;
+  margin: 0px 2px 0px 2px;
+}
+
+.figure_chart_help{
+  /*background-color: #eee;*/
+  height: 20px;
+  margin-top: -30px;
+  padding-right: 20px;
+  color: #888;
+  text-align: right;
+}
+
+svg.figure_chart{
+  height: 390px;
+  width: 390px;
+  margin: 5px;
+  /*display:none;*/
+  /*border: black 1px solid;*/
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#abe6f2+0,e5e5e5+100 */
+  background: #abe6f2; /* Old browsers */
+  background: -moz-linear-gradient(bottom, #abe6f2 0%, #fff 50%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(bottom, #abe6f2 0%,#fff 50%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to top, #abe6f2 0%,#fff 50%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+g.figure{
+  cursor: grab;
+}
+
+g.dragging{
+  cursor: grabbing;
+}
+
+.figure_head{
+  fill: none;
+  stroke-width: 0.01;
+  stroke: rgb(255,0,0);
+}
+
+.figure_body{
+  fill: none;
+  stroke-width: 0.01;
+  stroke: rgb(0,0,255);
+}
+
+@media only screen and (max-width: 1280px) {
+  section.container {
+    width: calc(100% - 400px);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  section.container {
+    order:3;
+    width: 100%;
+  }
+}
