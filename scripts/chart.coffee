@@ -17,11 +17,12 @@ hero_selection_template = Handlebars.compile(
 
 #### timescales constants
 
-timescale = 1000 / 20 # px/sec
+timescale = 60 # px/sec
 max_time = 17.5 # sec
-chart_padding_left = 30 # px
-chart_padding_right = 30 # px
+chart_padding_left = 15 # px
+chart_padding_right = 0 # px
 chart_width = max_time*timescale + chart_padding_left + chart_padding_right
+console.log chart_width
 timeScale = d3.scaleLinear()
     .domain([0, max_time])
     .range([chart_padding_left, chart_width])
@@ -30,11 +31,14 @@ timescale = do ->
   domain = timeScale.domain()
   (range[1] - range[0]) / (domain[1] - domain[0])
 
+console.log timescale
+
 timeAxis = d3.axisTop(timeScale)
             .ticks(20)
 
 d3.select("svg.timeScale")
-    .style 'width', chart_width
+    .style 'min-width', chart_width
+    .style 'max-width', chart_width
     .attr 'viewBox', "0 -30 #{chart_width} 30"
   .append("g")
     .call(timeAxis)
@@ -226,7 +230,6 @@ class WeaponData
     if last_shot.duration?
       time += last_shot.duration
     @dps = total_dmg / time
-    console.log @dps
     @height = 2*Math.ceil(@height/2)
 
   shot_dimensions: (shot) ->
@@ -436,6 +439,9 @@ hero_rows = do -> # state_data
     .style("opacity", 0)
 
   svgs  = rows.select('svg')
+    .style 'min-width', chart_width
+    .style 'max-width', chart_width
+
   shots = svgs.selectAll('rect.shot')
       .data (wdata) -> wdata.shots
     .enter().append('rect')

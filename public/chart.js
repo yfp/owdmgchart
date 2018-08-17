@@ -23,15 +23,17 @@
   hero_selection_template = Handlebars.compile(d3.select('#hero-selection-template').html());
 
   //### timescales constants
-  timescale = 1000 / 20; // px/sec
+  timescale = 60; // px/sec
 
   max_time = 17.5; // sec
 
-  chart_padding_left = 30; // px
+  chart_padding_left = 15; // px
 
-  chart_padding_right = 30; // px
+  chart_padding_right = 0; // px
 
   chart_width = max_time * timescale + chart_padding_left + chart_padding_right;
+
+  console.log(chart_width);
 
   timeScale = d3.scaleLinear().domain([0, max_time]).range([chart_padding_left, chart_width]);
 
@@ -42,9 +44,11 @@
     return (range[1] - range[0]) / (domain[1] - domain[0]);
   })();
 
+  console.log(timescale);
+
   timeAxis = d3.axisTop(timeScale).ticks(20);
 
-  d3.select("svg.timeScale").style('width', chart_width).attr('viewBox', `0 -30 ${chart_width} 30`).append("g").call(timeAxis);
+  d3.select("svg.timeScale").style('min-width', chart_width).style('max-width', chart_width).attr('viewBox', `0 -30 ${chart_width} 30`).append("g").call(timeAxis);
 
   areascale = 2; // px^2 / hp
 
@@ -331,7 +335,6 @@
           time += last_shot.duration;
         }
         this.dps = total_dmg / time;
-        console.log(this.dps);
         return this.height = 2 * Math.ceil(this.height / 2);
       }
 
@@ -631,7 +634,7 @@
       return htmlToElement(row_template(wdata));
     });
     tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
-    svgs = rows.select('svg');
+    svgs = rows.select('svg').style('min-width', chart_width).style('max-width', chart_width);
     shots = svgs.selectAll('rect.shot').data(function(wdata) {
       return wdata.shots;
     }).enter().append('rect').classed('shot', true).attrs(state_data.shot_attrs).attr('fill', function(shot) {
