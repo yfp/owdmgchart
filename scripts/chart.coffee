@@ -125,7 +125,7 @@ enemy_Roadhog = do() ->
   head_width = 0.6
   new Enemy(
     {
-      url: "images/roadhog_figure.png"
+      url: "images/roadhog_figure_lighter.png"
       dims:
         width: 858
         height:873
@@ -332,6 +332,14 @@ hero_filter = do () ->
 
 # info string 
 info_string = do ->
+  percent_str = (val) ->
+    str = (100*val).toFixed(1)
+    str = switch str
+      when '0.0' then '0'
+      when '100.0' then '100'
+      else str
+    "#{str}%"
+
   info_string = 
     current: 0
     variants: [
@@ -340,13 +348,13 @@ info_string = do ->
     ,
       text: 'Acc'
       func: (wdata) ->
-        acc = 100*(wdata.outcomes[HIT]+wdata.outcomes[CRIT])
-        acc.toFixed(1) + '%'
+        acc = wdata.outcomes[HIT]+wdata.outcomes[CRIT]
+        percent_str acc
     ,
       text: 'Crit acc'
       func: (wdata) ->
-        acc = 100*(wdata.outcomes[CRIT])
-        acc.toFixed(1) + '%'
+        acc = wdata.outcomes[CRIT]
+        percent_str acc
     ]
     text: (wdata) ->
       @variants[@current].func(wdata)
@@ -498,7 +506,7 @@ do -> #enemy, crosshair, state_data
     slider = d3.sliderHorizontal()
         .min(0)
         .max(50)
-        .width(350)
+        .width(295)
         .tickFormat(d3.format('.1f'))
         .ticks(6)
         .default(crosshair.distance)
@@ -592,8 +600,8 @@ do ->
   set_multiplier_string = ->
     str = "#{@modificator.factor}×"
     if modificator.mods.armor.on
-      str += " + armor"
-    d3.select('p.mod-result').text str
+      str += " – armor"
+    d3.select('.mod-result').text str
 
   d3.select('.modificators')
     .selectAll('.hero-ability-icon-bg')

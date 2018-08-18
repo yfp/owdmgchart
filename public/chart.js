@@ -191,7 +191,7 @@
     head_height = 2.0;
     head_width = 0.6;
     return new Enemy({
-      url: "images/roadhog_figure.png",
+      url: "images/roadhog_figure_lighter.png",
       dims: {
         width: 858,
         height: 873
@@ -485,6 +485,22 @@
 
   // info string 
   info_string = (function() {
+    var percent_str;
+    percent_str = function(val) {
+      var str;
+      str = (100 * val).toFixed(1);
+      str = (function() {
+        switch (str) {
+          case '0.0':
+            return '0';
+          case '100.0':
+            return '100';
+          default:
+            return str;
+        }
+      })();
+      return `${str}%`;
+    };
     info_string = {
       current: 0,
       variants: [
@@ -499,16 +515,16 @@
           text: 'Acc',
           func: function(wdata) {
             var acc;
-            acc = 100 * (wdata.outcomes[HIT] + wdata.outcomes[CRIT]);
-            return acc.toFixed(1) + '%';
+            acc = wdata.outcomes[HIT] + wdata.outcomes[CRIT];
+            return percent_str(acc);
           }
         },
         {
           text: 'Crit acc',
           func: function(wdata) {
             var acc;
-            acc = 100 * wdata.outcomes[CRIT];
-            return acc.toFixed(1) + '%';
+            acc = wdata.outcomes[CRIT];
+            return percent_str(acc);
           }
         }
       ],
@@ -693,7 +709,7 @@
         val = parseFloat(input.property('value'));
         return update_distance(val, true, false);
       });
-      slider = d3.sliderHorizontal().min(0).max(50).width(350).tickFormat(d3.format('.1f')).ticks(6).default(crosshair.distance).on('onchange', _.throttle(function(val) {
+      slider = d3.sliderHorizontal().min(0).max(50).width(295).tickFormat(d3.format('.1f')).ticks(6).default(crosshair.distance).on('onchange', _.throttle(function(val) {
         if (!local_update_dist) {
           return update_distance(val, false, true);
         }
@@ -777,9 +793,9 @@
       var str;
       str = `${this.modificator.factor}×`;
       if (modificator.mods.armor.on) {
-        str += " + armor";
+        str += " – armor";
       }
-      return d3.select('p.mod-result').text(str);
+      return d3.select('.mod-result').text(str);
     };
     return d3.select('.modificators').selectAll('.hero-ability-icon-bg').data(modificator.mod_list).classed('inverse', true).style('background-color', 'transparent').on('click', function(m) {
       m.on = !m.on;

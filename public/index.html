@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- <meta name="viewport" content="width=800, initial-scale=1"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <title>owdmg</title>
@@ -44,54 +44,61 @@
     <div class="chart"></div>
   </section>
   <aside>
-    <header>
-      #damage chart
-    </header>
-    <div class="distance-panel">
-      <p>Distance to target: <input type="text" class="distance-input" value="5">m</p>
-      <div id="distance-slider"></div>
-    </div>
-    <div class="modificators">
-      <div class="mod-panel mod-reduction">
-        <p>Damage reduction</p>
-        <div class='icon-box mod-icon-box'>
-          <div class="hero-ability-icon-bg">
-            <img class="hero-ability-icon" src="hero-icons/armor.png"/>
+    <div class="panels">
+      <header>
+        #damage chart
+      </header>
+      <div class="distance-panel">
+        <p>Distance to target: <input type="text" class="distance-input" value="5">m</p>
+        <div id="distance-slider"></div>
+      </div>
+      <div class="modificators">
+        <p>Damage factor = <span class="mod-result">1×<span></p>
+        <div class="mod-panel mod-reduction">
+          <p>Reduction</p>
+          <div class='icon-box mod-icon-box'>
+            <div class="hero-ability-icon-bg">
+              <img class="hero-ability-icon" src="hero-icons/armor.png"/>
+            </div>
+            <div class="hero-ability-icon-bg">
+              <img class="hero-ability-icon" src="hero-icons/nanoboost.png"/>
+            </div>
           </div>
-          <div class="hero-ability-icon-bg">
-            <img class="hero-ability-icon" src="hero-icons/nanoboost.png"/>
+        </div>
+        <div class="mod-panel mod-boost">
+          <p>Boost and amplification</p>
+          <div class='icon-box mod-icon-box'>
+            <div class="hero-ability-icon-bg">
+              <img class="hero-ability-icon" src="hero-icons/damage-boost.png"/>
+            </div>
+            <div class="hero-ability-icon-bg">
+              <img class="hero-ability-icon" src="hero-icons/supercharger.png"/>
+            </div>
+            <div class="hero-ability-icon-bg">
+              <img class="hero-ability-icon" src="hero-icons/nanoboost.png"/>
+            </div>
+            <div class="hero-ability-icon-bg">
+              <img class="hero-ability-icon" src="hero-icons/discord-orb.png"/>
+            </div>
           </div>
         </div>
       </div>
-      <div class="mod-panel mod-boost">
-        <p>Damage increase</p>
-        <div class='icon-box mod-icon-box'>
-          <div class="hero-ability-icon-bg">
-            <img class="hero-ability-icon" src="hero-icons/damage-boost.png"/>
-          </div>
-          <div class="hero-ability-icon-bg">
-            <img class="hero-ability-icon" src="hero-icons/supercharger.png"/>
-          </div>
-          <div class="hero-ability-icon-bg">
-            <img class="hero-ability-icon" src="hero-icons/nanoboost.png"/>
-          </div>
-          <div class="hero-ability-icon-bg">
-            <img class="hero-ability-icon" src="hero-icons/discord-orb.png"/>
-          </div>
-        </div>
-      </div>
-      <p class="mod-result">1×</p>
     </div>
-    <svg class="figure_chart" viewBox="-25 -25 50 50" xmlns="http://www.w3.org/2000/svg">
-      <g class="figure" transform="scale(10) translate(25 25)">
-          <image opacity="0.7"/>
-      </g>
-      <circle cx="0" cy="0" r="0.5" opacity="1"  fill="#888"/>
-      <circle cx="0" cy="0" r="10.15" stroke="#888"
-        stroke-width="0.2" fill="none" opacity="1"/>
-    </svg>
-    <div class="figure_chart_help">
-      Drag to adjust crosshair
+    <div class="enemy-viewport">
+      <svg class="figure_chart" viewBox="-25 -25 50 50" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <g class="figure" transform="scale(10) translate(25 25)">
+              <image filter="brightness(0.4)"/>
+          </g>
+        </g>
+        <circle class="figure-crosshair figure-crosshair-dot"
+          cx="0" cy="0" r="0.5" fill="rgb(255,0,0)"/>
+        <circle class="figure-crosshair figure-crosshair-circle"
+          cx="0" cy="0" r="10.15" />
+      </svg>
+      <div class="figure_chart_help">
+        Drag to adjust crosshair
+      </div>
     </div>
   </aside>
 

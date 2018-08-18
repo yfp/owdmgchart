@@ -6,7 +6,8 @@ body{
 }
 
 section.container{
-  max-width: calc(1440px - 300px);
+  order: 1;
+  max-width: calc(1440px - 330px);
   /*background-color: #eee;*/
   display: flex;
 
@@ -14,13 +15,6 @@ section.container{
   flex-direction: column;
   flex-wrap: nowrap;
   /*width: 800px;*/
-  overflow: hidden;
-}
-
-aside{
-  order: 2;
-  width: 300px;
-  height: 100vh;
   overflow: hidden;
 }
 
@@ -50,6 +44,12 @@ aside{
 .nav a{
   border-bottom:1px dashed #4285f4;
 }
+
+.nav a:hover{
+  color: rgb(174, 89, 92);
+  border-bottom:1px dashed rgb(174, 89, 92);
+}
+
 
 .nav-toggle-select{
   display: flex;
@@ -221,7 +221,33 @@ div.tooltip {
   cursor: pointer;
 }
 
+aside{
+  order: 2;
+  width: 100%;
+  max-width: 330px;
+  max-height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  /*flex-direction: row;*/
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.panels{
+  max-width: 330px;
+}
+
+.enemy-viewport{
+  min-width: 320px;
+}
+
+header{
+  margin: 0px 0px 10px 0px;
+}
+
 .distance-panel p{
+  margin: 0px 0px 0px 0px;
   padding: 0px 20px 0px 20px;
   font-family: serif;
   font-size: 16px;
@@ -245,74 +271,100 @@ input.distance-input{
 .modificators p{
   margin: 3px 0px 3px 0px;
   text-align: center;
+  width: 100%;
+}
+
+.mod-panel p{
+  /*text-align: left;*/
+  /*border-bottom: #888 1px solid;*/
 }
 
 .mod-reduction{
-  width: 150px;
+  /*width: 120px;*/
+  
 }
 
 .mod-boost{
-  width: 250px;
+  /*width: 210px;*/
+  /*border-top: black 1px solid;*/
+  /*background-color: #eee;*/
 }
 
 .mod-icon-box{
   justify-content: center;
   max-width: 1000px;
+  min-width: 100px;
+}
+
+.mod-reduction .mod-icon-box{
+  justify-content: right;
 }
 
 .mod-panel .hero-ability-icon-bg{
-  margin: 1px 3px 1px 3px;
+  margin: 1px 1px 1px 1px;
   cursor: pointer;
 }
 
 .mod-panel .hero-ability-icon-bg:hover{
   border: #888 1px solid;
-  margin: 0px 2px 0px 2px;
+  margin: 0px 0px 0px 0px;
 }
 
 .figure_chart_help{
-  /*background-color: #eee;*/
+  /*background-color: #abe6f2;*/
   height: 20px;
   margin-top: -30px;
   padding-right: 20px;
-  color: #888;
+  color: #fff;
   text-align: right;
+  text-shadow: 0 0 5px #abe6f2;
 }
 
 svg.figure_chart{
-  height: 390px;
-  width: 390px;
+  height: 320px;
+  min-width: 320px;
   margin: 5px;
-
+  border-radius: 5px;
   background: #abe6f2; /* Old browsers */
   background: -moz-linear-gradient(bottom, #abe6f2 0%, #fff 50%); /* FF3.6-15 */
   background: -webkit-linear-gradient(bottom, #abe6f2 0%,#fff 50%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to top, #abe6f2 0%,#fff 50%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
-g.figure{
+svg g.figure{
   cursor: grab;
 }
 
-g.dragging{
+svg g.dragging{
   cursor: grabbing;
 }
 
-.figure_head{
+svg .figure_head{
   fill: none;
   stroke-width: 0.01;
-  stroke: rgb(255,0,0);
+  stroke: black;
 }
 
-.figure_body{
+svg .figure_body{
   fill: none;
   stroke-width: 0.01;
-  stroke: rgb(0,0,255);
+  stroke: black;
 }
+
+svg .figure-crosshair-dot{
+  fill: red;
+}
+
+svg .figure-crosshair-circle{
+  fill: none;
+  stroke-width: 0.2;
+  stroke: red;
+}
+
 
 @media only screen and (max-width: 1440px) {
   section.container {
-    width: calc(100% - 300px);
+    width: calc(100% - 330px);
   }
 }
 
@@ -320,5 +372,10 @@ g.dragging{
   section.container {
     order:3;
     width: 100%;
+  }
+
+  aside{
+    max-width: 1000px;
+    max-height: 1000px;
   }
 }
