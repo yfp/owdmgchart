@@ -22,7 +22,6 @@ max_time = 17.5 # sec
 chart_padding_left = 15 # px
 chart_padding_right = 0 # px
 chart_width = max_time*timescale + chart_padding_left + chart_padding_right
-console.log chart_width
 timeScale = d3.scaleLinear()
     .domain([0, max_time])
     .range([chart_padding_left, chart_width])
@@ -30,8 +29,6 @@ timescale = do ->
   range = timeScale.range()
   domain = timeScale.domain()
   (range[1] - range[0]) / (domain[1] - domain[0])
-
-console.log timescale
 
 timeAxis = d3.axisTop(timeScale)
             .ticks(20)
@@ -42,6 +39,14 @@ d3.select("svg.timeScale")
     .attr 'viewBox', "0 -30 #{chart_width} 30"
   .append("g")
     .call(timeAxis)
+  .append 'text'
+    .text 'time'
+    .attrs 
+      fill: "#000"
+      y: -9
+      x: chart_padding_left+timescale/2
+      # 'text-anchor': 'start'    
+
 
 areascale = 2 # px^2 / hp
 radians = Math.PI/180
@@ -140,12 +145,14 @@ enemy_Roadhog = do() ->
 # ht = 2.21
 # basicRectangle = new RectHitBox(0,ht/2,2,ht)
 enemy = enemy_Roadhog
+HOG_HP = 600
 
 class WeaponData
-  total_time = 10*max_time
-  draw_time = 1.2*max_time
+  total_time = 1.2*max_time
+  # draw_time = 1.2*max_time
 
   constructor: (@weapon) ->
+    @order = @weapon.index + 1
     shot_spacing = timescale * (@weapon.burst?.delay or @weapon.shot_time)
     @filling = @weapon.filling or 0.5
     @is_beam = @weapon.type is "beam"
@@ -180,18 +187,19 @@ class WeaponData
     @shots = []
     ammo = @weapon.ammo
     total_dmg = 0
+    console.log total_time
     while t < total_time
       shot = {radius: @radius_func(ammo, t)}
       [ammo, dt, ammo_consumed] = @weapon.shot_time_func(ammo, t)
-      if t < draw_time
-        shot.t = t + @time_delay
-        shot.wdata = @
-        if ammo_consumed > 1
-          shot.ammo_mult = ammo_consumed
-        if @weapon.type is "beam"
-          shot.duration = @weapon.shot_time * ammo_consumed
-        @shots.push shot
+      shot.t = t + @time_delay
+      shot.wdata = @
+      if ammo_consumed > 1
+        shot.ammo_mult = ammo_consumed
+      if @weapon.type is "beam"
+        shot.duration = @weapon.shot_time * ammo_consumed
+      @shots.push shot
       t += dt
+    console.log @weapon.name, @shots.length
 
   simulate_shot_outcomes: (enemy, crosshair) ->
     total_outcomes = [0,0,0]
@@ -212,24 +220,33 @@ class WeaponData
     @outcomes = (o/total for o in total_outcomes)
 
   calculate_shots_damage: ->
-    @height = 30
+    @height = 0
     @hit_dmg = @basic_dmg*modificator.factor
     @crit_dmg = @hit_dmg * @weapon.crit_factor
     if modificator.mods.armor.on
       for key in ['hit_dmg', 'crit_dmg']
         @[key] = modificator.mods.armor.func @[key]
     total_dmg = 0
+    @rhkt = undefined
     for shot, index in @shots
       shot.damage = shot.outcomes[HIT ] * @hit_dmg + 
                     shot.outcomes[CRIT] * @crit_dmg
       h = @shot_dimensions(shot)
       total_dmg += shot.damage
+      @rhkt ?= if total_dmg >= HOG_HP
+        shot.t + if shot.duration
+          (total_dmg - HOG_HP)/shot.damage*shot.duration
+        else 0
       @height = h if h > @height
     last_shot = @shots[@shots.length-1]
     time = last_shot.t
     if last_shot.duration?
       time += last_shot.duration
     @dps = total_dmg / time
+    @rhkt ?= if @dps > 0
+      HOG_HP / @dps
+    else Infinity
+    
     @height = 2*Math.ceil(@height/2)
 
   shot_dimensions: (shot) ->
@@ -257,78 +274,22 @@ class PhotonProjectorWeaponData extends BeamWeaponData
       @dmg_levels.push @hit_dmg*factor
     if modificator.mods.armor.on
       @dmg_levels = (modificator.mods.armor.func(dmg) for dmg in @dmg_levels)
+    total_dmg = 0
+    @rhkt = undefined
     for shot, index in @shots
       basic_dmg = if index >= @dmg_levels.length
         @dmg_levels[@dmg_levels.length-1]
       else @dmg_levels[index]
       shot.damage = shot.outcomes[HIT] * basic_dmg
       h = @shot_dimensions(shot)
+      total_dmg += shot.damage
+      @rhkt ?= if total_dmg >= HOG_HP
+        shot.t + (total_dmg - HOG_HP)/shot.damage*shot.duration
       @height = h if h > @height
-    console.log @weapon.name, @height, @dmg_levels
+    last_shot = @shots[@shots.length-1]
+    time = last_shot.t + last_shot.duration
+    @dps = total_dmg / time
     @height = 2*Math.ceil(@height/2)
-
-
-# hero filterting
-hero_filter = do () ->
-  hero_selection_el = d3.select('.hero-selection-row')
-  hero_selection_el.display = "none"
-  d3.selectAll('.nav-toggle-select')
-    .on "click", ->
-      hero_selection_el.style 'display', () ->
-        hero_selection_el.display =
-          if hero_selection_el.display is "none" then "block" else "none"
-
-  sel_weapons = d3.select('.hero-selection').selectAll('div')
-      .data(weapons)
-    .enter().append (weapon) ->
-      htmlToElement hero_selection_template(weapon)
-    .on 'click', (weapon) ->
-      weapon.visible = not weapon.visible
-      d3.select(@)
-        .style 'background-color', if weapon.visible
-            weapon.hero.color
-          else 'initial'
-        .classed 'inverse', not weapon.visible
-      d3.select(".row##{weapon.idString}")
-        .style 'display', if weapon.visible then 'flex' else 'none'
-
-  reloadVisibility = ->
-    sel_weapons
-      .style 'background-color', (weapon) ->
-        if weapon.visible
-          weapon.hero.color
-        else 'initial'
-      .classed 'inverse', (weapon) -> not weapon.visible
-    chart.selectAll("div.row")
-      .style 'display', (wdata) ->
-        if wdata.weapon.visible then 'flex' else 'none'
-
-  d3.select('.select-all')
-    .on 'click', =>
-      for weapon in @weapons
-        weapon.visible = yes
-      reloadVisibility()
-  d3.select('.select-none')
-    .on 'click', ->
-      for weapon in weapons
-        weapon.visible = no
-      reloadVisibility()
-
-  d3.selectAll('.select-by-role')
-    .on 'click', ->
-      role = d3.select(@).attr 'data-role'
-      for weapon in weapons
-        weapon.visible = (weapon.hero.role is role)
-      reloadVisibility()
-
-  d3.selectAll('.select-by-weapon')
-    .on 'click', ->
-      wtype = d3.select(@).attr 'data-weapon'
-      for weapon in weapons
-        weapon.visible = _.includes(weapon.type, wtype)
-      reloadVisibility()
-
-  reloadVisibility: reloadVisibility
 
 # info string 
 info_string = do ->
@@ -343,21 +304,37 @@ info_string = do ->
   info_string = 
     current: 0
     variants: [
+      name: 'dps'
       text: 'Mean DPS'
-      func: (wdata) -> wdata.dps?.toFixed(1)
+      func: (wdata) -> wdata.dps?.toFixed(3)
     ,
-      text: 'Acc'
+      name: 'acc'
+      text: 'Accuracy'
       func: (wdata) ->
         acc = wdata.outcomes[HIT]+wdata.outcomes[CRIT]
         percent_str acc
     ,
-      text: 'Crit acc'
+      name: 'crit_acc'
+      text: 'Crit accur.'
       func: (wdata) ->
-        acc = wdata.outcomes[CRIT]
-        percent_str acc
+        if wdata.weapon.crit_factor is 1
+          'n/a'
+        else
+          acc = wdata.outcomes[CRIT]
+          percent_str acc
+    ,
+      name: 'rhkt'
+      text: 'Kill time'
+      func: (wdata) ->
+        if wdata.rhkt is Infinity
+          "∞"
+        else
+          "#{wdata.rhkt?.toFixed(1)}s"
+
     ]
+    cv: -> @variants[@current]
     text: (wdata) ->
-      @variants[@current].func(wdata)
+      @cv().func(wdata)
     increment: ->
       @current += 1
       @current = @current % @variants.length
@@ -365,13 +342,14 @@ info_string = do ->
       hero_rows.rows
         .select('.info-string')
         .text (wdata) -> info_string.text(wdata)
+      hero_filter.reloadOrder()
 
 
   d3.select('.nav-toggle-info')
     .on 'click', ->
       info_string.increment()
       info_string.update_rows()
-      str = info_string.variants[info_string.current].text
+      str = info_string.cv().text
       d3.select(@).select('a').text str
 
   info_string
@@ -408,6 +386,12 @@ state_data = do -> #weapons, enemy, distance, crosshair
     for wdata in @list
       wdata.refresh_crosshair(enemy, crosshair)
     @update_damage()
+  update_row_heights: (rows) ->
+    rows.style 'min-height', (wdata) ->
+      h = if wdata.weapon.visible
+        4+Math.max 46, wdata.height
+      else 0 
+      "#{h}px"
   update_damage: (update='all') ->
     if update is 'all'
       row_selector = 'div.row'
@@ -420,19 +404,14 @@ state_data = do -> #weapons, enemy, distance, crosshair
       wdata.calculate_shots_damage()
 
     rows = chart.selectAll(row_selector)
+    @update_row_heights rows
     rows.select '.info-string'
       .text (wdata) -> info_string.text(wdata)
-    rows.select '.icon-box'
-      .transition()
-      .style 'height', (wdata) ->
-        "#{wdata.height}px"
+    hero_filter.reloadOrder()
     svgs = rows.select('svg')
-      .style 'height', (wdata) -> "#{wdata.height}px"
-      .attr 'viewBox', (wdata) -> 
-        "0 -#{wdata.height/2} #{chart_width} #{wdata.height}"
     svgs.selectAll('rect.shot')
         .data (wdata) -> wdata.shots
-      .transition()
+      .transition().duration(400)
       .attrs @shot_attrs
 
 # init hero rows
@@ -449,6 +428,8 @@ hero_rows = do -> # state_data
   svgs  = rows.select('svg')
     .style 'min-width', chart_width
     .style 'max-width', chart_width
+    .attrs
+      viewBox: "0 -100 #{chart_width} 200"
 
   shots = svgs.selectAll('rect.shot')
       .data (wdata) -> wdata.shots
@@ -473,6 +454,155 @@ hero_rows = do -> # state_data
   rows:  rows
   svgs:  svgs
   shots: shots
+
+# hero filterting
+hero_filter = do () ->
+  hero_filter = init_order: yes
+  hero_selection_el = d3.select('.hero-selection-row')
+  hero_selection_el.display = "none"
+  toggleSelect = d3.selectAll('.nav-toggle-select')
+    .on "click", ->
+      toggle = not toggleSelect.classed('nav-selected')
+      toggleSelect.classed 'nav-selected', toggle
+      if toggle
+        hero_selection_el.classed 'hidden-row', not toggle
+        h = hero_selection_el.style 'height'
+        hero_selection_el.style 'height', "0px"
+        hero_selection_el
+          .transition()
+          .style 'height', h
+      else
+        h = hero_selection_el.style 'height'
+        hero_selection_el.style 'height', h
+        hero_selection_el
+          .transition().duration(200)
+          .style 'height', "0px"
+      setTimeout( ->
+        h = hero_selection_el.style 'height'
+        hero_selection_el.style 'height', undefined
+        if h is '0px'
+          hero_selection_el.classed 'hidden-row', yes
+      , 2000)
+
+  toggleSort = d3.selectAll('.nav-toggle-sort')
+    .on 'click', ->
+      hero_filter.init_order = not hero_filter.init_order
+      hero_filter.reloadOrder()
+      toggleSort.classed 'nav-selected', not toggleSort.classed('nav-selected')
+
+  sel_weapons = d3.select('.hero-selection').selectAll('div')
+      .data(weapons)
+    .enter().append (weapon) ->
+      htmlToElement hero_selection_template(weapon)
+    .on 'click', (weapon) ->
+      weapon.visible = not weapon.visible
+      hero_filter.reloadVisibility([weapon])
+
+  hero_filter.reloadVisibility = (weapons = sel_weapons)->
+    sel_weapons
+      .style 'background-color', (weapon) ->
+        if weapon.visible
+          weapon.hero.color
+        else 'initial'
+      .classed 'inverse', (weapon) -> not weapon.visible
+    hero_rows.rows
+      .style 'opacity', (wdata) ->
+        if wdata.weapon.visible then 1 else 0
+      .style 'order', (wdata)->wdata.order
+    state_data.update_row_heights hero_rows.rows
+
+  hero_rows.rows
+    .each (wdata) ->
+      TweenLite.set @, y: 0
+      wdata.tween_box = 
+        transform: @._gsTransform
+        x: @.offsetLeft
+        y: @.offsetTop
+        node: @
+
+  sort_by_field = (field) ->
+    local_f = switch field
+      when 'dps' then (d) -> d.dps
+      when 'acc' then (d) -> d.outcomes[HIT]+d.outcomes[CRIT]
+      when 'crit_acc' then (d) -> d.outcomes[CRIT]
+      when 'rhkt' then (d) -> -d.rhkt
+      else (d) -> -d.weapon.index
+    (a, b) ->
+      A = local_f(a.wdata)
+      B = local_f(b.wdata)
+      return  1 if A < B
+      return -1 if A > B
+      return a.idx - b.idx
+
+  ease  = Power1.easeInOut
+  hero_filter.reloadOrder = () ->
+    changed = if hero_filter.init_order
+      ch = false
+      _.each state_data.list, (wdata) ->
+        ch or= wdata.order isnt (wdata.weapon.index + 1)
+        wdata.order = wdata.weapon.index + 1
+      ch
+    else
+      sort_arr = _.map state_data.list, (wdata, idx)->
+        {idx:wdata.order, wdata:wdata}
+      sort_arr.sort sort_by_field(info_string.cv().name)
+      ch = false
+      _.each sort_arr, (d, idx) ->
+        ch or= idx isnt d.idx
+        d.wdata.order = idx
+      ch
+    if changed
+      hero_rows.rows
+        .style 'order', (wdata) -> wdata.order
+        .each (wdata) ->
+          box   = wdata.tween_box
+          lastX = box.x
+          lastY = box.y
+          
+          box.x = box.node.offsetLeft
+          box.y = box.node.offsetTop
+          
+          #Continue if box hasn't moved
+          if lastX is box.x and lastY is box.y
+            return
+          
+          #Reversed delta values taking into account current transforms
+          x = box.transform.x + lastX - box.x;
+          y = box.transform.y + lastY - box.y;  
+          
+          #Tween to 0 to remove the transforms
+          TweenLite.fromTo(
+            box.node, 0.5,
+            { x, y },
+            { x: 0, y: 0, ease }
+          )
+
+  d3.select('.select-all')
+    .on 'click', =>
+      for weapon in @weapons
+        weapon.visible = yes
+      reloadVisibility()
+  d3.select('.select-none')
+    .on 'click', ->
+      for weapon in weapons
+        weapon.visible = no
+      hero_filter.reloadVisibility()
+
+  d3.selectAll('.select-by-role')
+    .on 'click', ->
+      role = d3.select(@).attr 'data-role'
+      for weapon in weapons
+        weapon.visible = (weapon.hero.role is role)
+      hero_filter.reloadVisibility()
+
+  d3.selectAll('.select-by-weapon')
+    .on 'click', ->
+      wtype = d3.select(@).attr 'data-weapon'
+      for weapon in weapons
+        weapon.visible = _.includes(weapon.type, wtype)
+      hero_filter.reloadVisibility()
+
+  hero_filter
 
 state_data.update_damage()
 hero_filter.reloadVisibility()
@@ -633,4 +763,3 @@ do (weapon_dict = weapon_dict) ->
           wdata = state_data.list[weapon.index]
           wdata.set_distance(crosshair.distance) 
           state_data.update_damage(weapon)
-

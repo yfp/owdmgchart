@@ -158,8 +158,9 @@
 
   this.heros.WreckingBall.name = "Wrecking Ball";
 
-  this.weapons = [ // D.va
+  this.weapons = [
     {
+      // D.va mech
       name: "Fusion Cannons",
       hero: this.heros.Dva,
       icon_url: "hero-icons/dva-cannons.png",
@@ -177,7 +178,7 @@
         angle: 4.15
       },
       fire_rate: 6.67, //shots/sec
-      ammo: 2e308
+      ammo: 2e308 // D.va baby
     },
     {
       name: "Light Gun",
@@ -191,6 +192,7 @@
       fire_rate: 7, //shots/sec
       ammo: 20,
       reload_time: 1.5 //sec
+    // Orisa
     },
     {
       name: "Fusion Driver",
@@ -207,6 +209,7 @@
       fire_rate: 12, //shots/sec
       ammo: 150,
       reload_time: 2.5 //sec
+    // Reinhardt
     },
     {
       name: "Rocket Hammer",
@@ -218,6 +221,7 @@
         max_range: 5 //m
       },
       fire_rate: 1 / 0.9 //swings/sec
+    // Roadhog M1
     },
     {
       name: "Scrap Gun (primary)",
@@ -239,7 +243,7 @@
       fire_rate: 1 / 0.7, //shots/sec
       ammo: 5,
       reload_time: 1.5 //sec
-    //Roadhog M2
+    // Roadhog M2
     },
     {
       name: "Scrap Gun (secondary)",
@@ -250,12 +254,10 @@
       pellets: [1,
     25],
       damage: {
-        dpshot: [6,
-    4 / 3],
-        falloff: [10,
-    20],
+        dpshot: 6, //, 4/3]
+        // falloff: [10, 20]
         dpshot_ball: 50,
-        range_ball: 10 //m
+        range_ball: 9 //m
       },
       spread: {
         angle: 20.1
@@ -279,6 +281,7 @@
       fire_rate: 20, //shots/sec
       ammo: 100,
       reload_time: 1.5 //sec
+    // Wrecking Ball
     },
     {
       name: "Quad Cannons",
@@ -313,6 +316,7 @@
       fire_rate: 5, // 20 shots/sec to 5hz ticks = factor 4
       ammo: 100 / 4,
       reload_time: 1.5 //sec
+    // Zarya M2
     },
     {
       name: "Particle Cannon (secondary)",
@@ -328,6 +332,7 @@
       fire_rate: 1, //shot/sec
       ammo: 4,
       reload_time: 1.5 //sec
+    // Bastion Recon
     },
     {
       name: "Configuration: Recon",
@@ -348,6 +353,7 @@
       fire_rate: 8, //shots/sec
       ammo: 25,
       reload_time: 2 //sec
+    // Bastion Sentry
     },
     {
       name: "Configuration: Sentry",
@@ -366,6 +372,7 @@
       fire_rate: 30, //shots/sec
       ammo: 300,
       reload_time: 2 //sec
+    // Doomfist
     },
     {
       name: "Hand Cannon",
@@ -383,6 +390,7 @@
       ammo: 4,
       fire_rate: 3, //shots/sec
       reload_time: 0.65 //sec
+    // Genji M1
     },
     {
       name: "Shuriken",
@@ -401,6 +409,7 @@
         delay: 0.1 //sec  ### CHECK
       },
       reload_time: 1.5 //sec
+    // Genji M2
     },
     {
       name: "Fan of Blades",
@@ -419,6 +428,7 @@
       ammo: 24 / 3,
       fire_rate: 1, //shots/sec
       reload_time: 1.5 //sec
+    // Hanzo
     },
     {
       name: "Storm Bow",
@@ -432,7 +442,7 @@
       ammo: 2e308,
       fire_rate: 1 / (0.5 + 0.5), //sec
       charge_delay: 0.5, //sec
-      crit_factor: 2
+      crit_factor: 2 // Junkrat
     },
     {
       name: "Frag Launcher",
@@ -446,6 +456,7 @@
       ammo: 5,
       fire_rate: 5 / 3, //shots/sec
       reload_time: 1.5 //sec
+    // McCree M1
     },
     {
       name: "Peacekeeper",
@@ -462,6 +473,7 @@
       ammo: 6,
       fire_rate: 2, //shots/sec
       reload_time: 1.5 //sec
+    // McCree M2
     },
     {
       name: "Fan the Hammer",
@@ -482,6 +494,7 @@
       ammo: 6,
       fire_rate: 6.9, //shots/sec
       reload_time: 1.5 //sec
+    // Mei M1
     },
     {
       name: "Endothermic Blaster",
@@ -497,6 +510,7 @@
       fire_rate: 20, //shots/sec
       ammo: 200,
       reload_time: 1.5 //sec
+    // Mei M2
     },
     {
       name: "Icicle",
@@ -512,6 +526,7 @@
       ammo: 10,
       charge_delay: 0.4, //sec
       reload_time: 1.5 //sec
+    // Soldier
     },
     {
       name: "Pulse Rifle",
@@ -532,6 +547,7 @@
       ammo: 25,
       fire_rate: 9, //shots/sec
       reload_time: 1.5 //sec
+    // Pharah
     },
     {
       name: "Rocket Launcher",
@@ -547,6 +563,7 @@
       ammo: 6,
       fire_rate: 1.1, //shots/sec
       reload_time: 1 //sec
+    // Reaper
     },
     {
       name: "Hellfire Shotguns",
@@ -566,6 +583,7 @@
       ammo: 8,
       fire_rate: 2, //shots/sec
       reload_time: 1.5 //sec
+    // Sombra
     },
     {
       name: "Machine Pistol",
@@ -588,7 +606,7 @@
       ammo: 60,
       fire_rate: 20, //shots/sec
       reload_time: 1.5 //sec
-    // Symmetra # ADD M2
+    // Symmetra M1 
     },
     {
       name: "Photon Projector",
@@ -607,6 +625,23 @@
       fire_rate: 4, // 7 shots/sec to 4 hz ticks = factor 7/4=1.75
       ammo: 70 / 1.75,
       reload_time: 1.8 //sec
+    // Symmetra M2 ### CHECK thoroughly
+    },
+    {
+      name: "Photon Orb",
+      hero: this.heros.Symmetra,
+      icon_url: "hero-icons/symmetra-projector.png",
+      mousebutton: 'M2',
+      type: "projectile",
+      velocity: 20, //m/s
+      damage: {
+        dpshot: 60 // 6-60
+      },
+      fire_rate: 1 / (1 + 1 + 0.063), // shots/sec  0.2-1 sec = 0.063
+      charge_delay: 1 + 1, //sec  
+      ammo: 10, //1-10 rounds 70 total
+      reload_time: 1.8, //sec
+      crit_factor: 1 // Torbjorn M1
     },
     {
       name: "Rivet Gun (primary)",
@@ -621,7 +656,7 @@
       fire_rate: 1 / 0.6, //shots/sec
       ammo: 18,
       reload_time: 2, //sec
-      crit_factor: 2
+      crit_factor: 2 // Torbjorn M2
     },
     {
       name: "Rivet Gun (secondary)",
@@ -643,6 +678,7 @@
       fire_rate: 1.25, //shots/sec
       ammo: 6,
       reload_time: 2 //sec
+    // Torbjorn hammer
     },
     {
       name: "Forge Hammer",
@@ -654,6 +690,7 @@
         max_range: 2 //m   ### CHECK
       },
       fire_rate: 1.25 //shots/sec
+    // Tracer
     },
     {
       name: "Pulse Pistols",
@@ -677,6 +714,7 @@
       ammo: 20,
       fire_rate: 20, //shots/sec
       reload_time: 1.25 //sec
+    // Widowmaker M1
     },
     {
       name: "Widow's Kiss: Assault",
@@ -702,6 +740,7 @@
       ammo: 30,
       fire_rate: 10, //shots/sec
       reload_time: 1.5 //sec
+    // Widowmaker M2
     },
     {
       name: "Widow's Kiss: Sniper",
@@ -731,7 +770,7 @@
       ammo: 14,
       fire_rate: 1.25, //shots/sec
       reload_time: 1.5, //sec
-      crit_factor: 1
+      crit_factor: 1 // Ana M2
     },
     {
       name: "Biotic Rifle (secondary)",
@@ -745,7 +784,7 @@
       ammo: 14,
       fire_rate: 1.25, //shots/sec
       reload_time: 1.5, //sec
-      crit_factor: 1
+      crit_factor: 1 // Brigitte
     },
     {
       name: "Rocket Flail",
@@ -803,6 +842,7 @@
       fire_rate: 1, //shots/sec
       ammo: 17,
       reload_time: 0 //sec
+    // Zenyatta M1
     },
     {
       name: "Orb of Destruction",
@@ -817,6 +857,7 @@
       fire_rate: 2.5, //shots/sec
       ammo: 20,
       reload_time: 2 //sec
+    // Zenyatta M2
     },
     {
       name: "Orb Volley",
@@ -884,7 +925,10 @@
 
   (function(w) {
     var falloff, tan;
-    falloff = ramp(w.damage.dpshot, w.damage.falloff);
+    // falloff = ramp(w.damage.dpshot, w.damage.falloff)
+    falloff = function() {
+      return w.damage.dpshot;
+    };
     w.basic_damage_func = function(distance) {
       if (distance < this.damage.range_ball) {
         return this.damage.dpshot_ball;

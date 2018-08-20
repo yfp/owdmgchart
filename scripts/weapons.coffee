@@ -51,7 +51,8 @@ for name of @heros
 @heros.Soldier.name = "Soldier: 76"
 @heros.WreckingBall.name = "Wrecking Ball"
 
-@weapons = [ # D.va
+@weapons = [
+# D.va mech
   name: "Fusion Cannons"
   hero: @heros.Dva
   icon_url: "hero-icons/dva-cannons.png"
@@ -63,7 +64,7 @@ for name of @heros
   spread: angle: 4.15
   fire_rate: 6.67 #shots/sec
   ammo: Infinity
-,
+, # D.va baby
   name: "Light Gun"
   hero: @heros.Dva
   icon_url: "hero-icons/dva-gun.png"
@@ -73,7 +74,7 @@ for name of @heros
   fire_rate: 7 #shots/sec
   ammo: 20
   reload_time: 1.5 #sec
-,
+, # Orisa
   name: "Fusion Driver"
   hero: @heros.Orisa
   icon_url: "hero-icons/orisa-driver.png"
@@ -84,7 +85,7 @@ for name of @heros
   fire_rate: 12 #shots/sec
   ammo: 150
   reload_time: 2.5 #sec
-,
+, # Reinhardt
   name: "Rocket Hammer"
   hero: @heros.Reinhardt
   icon_url: "hero-icons/reinhardt-hammer.png"
@@ -93,7 +94,7 @@ for name of @heros
     dpshot: 75
     max_range: 5 #m
   fire_rate: 1/0.9 #swings/sec
-,
+, # Roadhog M1
   name: "Scrap Gun (primary)"
   hero: @heros.Roadhog
   icon_url: "hero-icons/roadhog-gun.png"
@@ -108,7 +109,7 @@ for name of @heros
   fire_rate: 1/0.7 #shots/sec
   ammo: 5
   reload_time: 1.5 #sec
-, #Roadhog M2
+, # Roadhog M2
   name: "Scrap Gun (secondary)"
   hero: @heros.Roadhog
   icon_url: "hero-icons/roadhog-gun.png"
@@ -116,10 +117,10 @@ for name of @heros
   type: "linear projectile/shotgun"
   pellets: [1, 25]
   damage:
-    dpshot:  [6, 4/3]
-    falloff: [10, 20]
+    dpshot:  6#, 4/3]
+    # falloff: [10, 20]
     dpshot_ball: 50
-    range_ball: 10#m
+    range_ball: 9#m
   spread: angle: 20.1
   velocity: 60 #m/s
   crit_factor: 2
@@ -137,7 +138,7 @@ for name of @heros
   fire_rate: 20 #shots/sec
   ammo: 100
   reload_time: 1.5 #sec
-,
+, # Wrecking Ball
   name: "Quad Cannons"
   hero: @heros.WreckingBall
   icon_url: "hero-icons/wreckingball-cannon.png"
@@ -162,7 +163,7 @@ for name of @heros
   fire_rate: 5 # 20 shots/sec to 5hz ticks = factor 4
   ammo: 100 / 4
   reload_time: 1.5 #sec
-,
+, # Zarya M2
   name: "Particle Cannon (secondary)"
   hero: @heros.Zarya
   icon_url: "hero-icons/zarya-cannon.png"
@@ -175,7 +176,7 @@ for name of @heros
   fire_rate: 1#shot/sec
   ammo: 4
   reload_time: 1.5 #sec
-,
+, # Bastion Recon
   name: "Configuration: Recon"
   hero: @heros.Bastion
   icon_url: 'hero-icons/bastion-recon.png'
@@ -189,7 +190,7 @@ for name of @heros
   fire_rate: 8 #shots/sec
   ammo: 25
   reload_time: 2 #sec
-,
+, # Bastion Sentry
   name: "Configuration: Sentry"
   hero: @heros.Bastion
   icon_url: 'hero-icons/bastion-sentry.png'
@@ -201,7 +202,7 @@ for name of @heros
   fire_rate: 30 #shots/sec
   ammo: 300
   reload_time: 2 #sec
-,
+, # Doomfist
   name: "Hand Cannon"
   hero: @heros.Doomfist
   icon_url: "hero-icons/doomfist-cannon.png"
@@ -213,7 +214,7 @@ for name of @heros
   ammo: 4
   fire_rate: 3 #shots/sec
   reload_time: 0.65#sec
-,
+, # Genji M1
   name: "Shuriken"
   hero: @heros.Genji
   icon_url: "hero-icons/genji-shuriken.png"
@@ -227,7 +228,7 @@ for name of @heros
     ammo: 3
     delay: 0.1#sec  ### CHECK
   reload_time: 1.5 #sec
-,
+, # Genji M2
   name: "Fan of Blades"
   hero: @heros.Genji
   icon_url: "hero-icons/genji-shuriken.png"
@@ -240,7 +241,7 @@ for name of @heros
   ammo: 24/3
   fire_rate: 1#shots/sec
   reload_time: 1.5 #sec
-,
+, # Hanzo
   name: "Storm Bow"
   hero: @heros.Hanzo
   icon_url: "hero-icons/hanzo-bow.png"
@@ -251,7 +252,7 @@ for name of @heros
   fire_rate: 1/(0.5+0.5)#sec
   charge_delay: 0.5#sec
   crit_factor: 2
-,
+, # Junkrat
   name: "Frag Launcher"
   hero: @heros.Junkrat
   icon_url: "hero-icons/junkrat-launcher.png"
@@ -261,7 +262,7 @@ for name of @heros
   ammo: 5
   fire_rate: 5/3 #shots/sec
   reload_time: 1.5#sec
-,
+, # McCree M1
   name: "Peacekeeper"
   hero: @heros.McCree
   icon_url: "hero-icons/mccree-peacemaker.png"
@@ -273,7 +274,7 @@ for name of @heros
   ammo: 6
   fire_rate: 2#shots/sec
   reload_time: 1.5 #sec
-,
+, # McCree M2
   name: "Fan the Hammer"
   hero: @heros.McCree
   icon_url: "hero-icons/mccree-peacemaker.png"
@@ -287,7 +288,7 @@ for name of @heros
   ammo: 6
   fire_rate: 6.9 #shots/sec
   reload_time: 1.5 #sec
-,
+, # Mei M1
   name: "Endothermic Blaster"
   hero: @heros.Mei
   icon_url: "hero-icons/mei-blaster.png"
@@ -300,7 +301,7 @@ for name of @heros
   fire_rate: 20#shots/sec
   ammo: 200
   reload_time: 1.5 #sec
-,
+, # Mei M2
   name: "Icicle"
   hero: @heros.Mei
   icon_url: "hero-icons/mei-blaster.png"
@@ -312,7 +313,7 @@ for name of @heros
   ammo: 10
   charge_delay: 0.4#sec
   reload_time: 1.5 #sec
-,
+, # Soldier
   name: "Pulse Rifle"
   hero: @heros.Soldier
   icon_url: "hero-icons/soldier-rifle.png"
@@ -326,7 +327,7 @@ for name of @heros
   ammo: 25
   fire_rate: 9 #shots/sec
   reload_time: 1.5 #sec
-,
+, # Pharah
   name: "Rocket Launcher"
   hero: @heros.Pharah
   icon_url: "hero-icons/pharah-launcher.png"
@@ -338,7 +339,7 @@ for name of @heros
   ammo: 6
   fire_rate: 1.1#shots/sec
   reload_time: 1 #sec
-,
+, # Reaper
   name: "Hellfire Shotguns"
   hero: @heros.Reaper
   icon_url: "hero-icons/reaper-shotgun.png"
@@ -351,7 +352,7 @@ for name of @heros
   ammo: 8
   fire_rate: 2#shots/sec
   reload_time: 1.5 #sec
-,
+, # Sombra
   name: "Machine Pistol"
   hero: @heros.Sombra
   icon_url: "hero-icons/sombra-pistol.png"
@@ -365,7 +366,7 @@ for name of @heros
   ammo: 60
   fire_rate: 20#shots/sec
   reload_time: 1.5 #sec
-, # Symmetra # ADD M2
+, # Symmetra M1 
   name: "Photon Projector"
   hero: @heros.Symmetra
   icon_url: "hero-icons/symmetra-projector.png"
@@ -379,7 +380,20 @@ for name of @heros
   fire_rate: 4 # 7 shots/sec to 4 hz ticks = factor 7/4=1.75
   ammo: 70 / 1.75
   reload_time: 1.8 #sec
-,
+, # Symmetra M2 ### CHECK thoroughly
+  name: "Photon Orb" 
+  hero: @heros.Symmetra
+  icon_url: "hero-icons/symmetra-projector.png"
+  mousebutton: 'M2'
+  type: "projectile"
+  velocity: 20#m/s
+  damage: dpshot: 60  # 6-60
+  fire_rate: 1/(1+1+0.063) # shots/sec  0.2-1 sec = 0.063
+  charge_delay: 1+1#sec  
+  ammo: 10  #1-10 rounds 70 total
+  reload_time: 1.8 #sec
+  crit_factor: 1
+, # Torbjorn M1
   name: "Rivet Gun (primary)"
   hero: @heros.Torbjorn
   icon_url: "hero-icons/torbjorn-gun.png"
@@ -392,7 +406,7 @@ for name of @heros
   ammo: 18
   reload_time: 2#sec
   crit_factor: 2
-,
+, # Torbjorn M2
   name: "Rivet Gun (secondary)"
   hero: @heros.Torbjorn
   icon_url: "hero-icons/torbjorn-gun.png"
@@ -407,7 +421,7 @@ for name of @heros
   fire_rate: 1.25 #shots/sec
   ammo: 6
   reload_time: 2#sec
-,
+, # Torbjorn hammer
   name: "Forge Hammer"
   hero: @heros.Torbjorn
   icon_url: "hero-icons/torbjorn-hammer.png"
@@ -416,7 +430,7 @@ for name of @heros
     dpshot: 55
     max_range: 2#m   ### CHECK
   fire_rate: 1.25 #shots/sec
-,
+, # Tracer
   name: "Pulse Pistols"
   hero: @heros.Tracer
   icon_url: "hero-icons/sombra-pistol.png"
@@ -431,7 +445,7 @@ for name of @heros
   ammo: 20
   fire_rate: 20#shots/sec
   reload_time: 1.25 #sec
-,
+, # Widowmaker M1
   name: "Widow's Kiss: Assault"
   hero: @heros.Widowmaker
   icon_url: "hero-icons/widowmaker-rifle.png"
@@ -446,7 +460,7 @@ for name of @heros
   ammo: 30
   fire_rate: 10#shots/sec
   reload_time: 1.5 #sec
-,
+, # Widowmaker M2
   name: "Widow's Kiss: Sniper"
   hero: @heros.Widowmaker
   icon_url: "hero-icons/widowmaker-rifle.png"
@@ -470,7 +484,7 @@ for name of @heros
   fire_rate: 1.25#shots/sec
   reload_time: 1.5 #sec
   crit_factor: 1
-,
+, # Ana M2
   name: "Biotic Rifle (secondary)"
   hero: @heros.Ana
   icon_url: "hero-icons/ana-rifle.png"
@@ -481,7 +495,7 @@ for name of @heros
   fire_rate: 1.25#shots/sec
   reload_time: 1.5 #sec
   crit_factor: 1
-,
+, # Brigitte
   name: "Rocket Flail"
   hero: @heros.Brigitte
   icon_url: "hero-icons/brigitte-flail.png"
@@ -524,7 +538,7 @@ for name of @heros
   fire_rate: 1#shots/sec
   ammo: 17
   reload_time: 0#sec
-,
+, # Zenyatta M1
   name: "Orb of Destruction"
   hero: @heros.Zenyatta
   icon_url: "hero-icons/zenyatta-orb.png"
@@ -535,7 +549,7 @@ for name of @heros
   fire_rate: 2.5#shots/sec
   ammo: 20
   reload_time: 2#sec
-,
+, # Zenyatta M2
   name: "Orb Volley"
   hero: @heros.Zenyatta
   icon_url: "hero-icons/zenyatta-orb.png"
@@ -580,7 +594,8 @@ do(w = @weapon_dict['Hand Cannon']) ->
       else [ammo-1, @shot_time, 1]
 
 do(w = @weapon_dict['Scrap Gun (secondary)']) ->
-  falloff = ramp(w.damage.dpshot, w.damage.falloff)
+  # falloff = ramp(w.damage.dpshot, w.damage.falloff)
+  falloff = -> w.damage.dpshot
   w.basic_damage_func = 
     (distance) ->
       if distance < @damage.range_ball

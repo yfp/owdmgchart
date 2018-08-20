@@ -2,43 +2,44 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=0.86">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <title>owdmg</title>
 </head>
 <body>
   <section class="container">
-    <div class="toprow hero-selection-row">
-      <div class="hero-selection">
-      </div>
-      <div class="nav select-buttons">
-        <a class="select select-all">Select all</a>
-        <a class="select select-none">Select none</a>
+    <div class="toprow hero-selection-row hidden-row">
+      <div class="hero-selection"></div>
+
+      <div class="select-buttons">
+        <a class="link-button select select-all">Select all</a>
+        <a class="link-button select select-none">Select none</a>
         /
-        <a class="select select-by-role" data-role='tank'>Tanks</a>
-        <a class="select select-by-role" data-role='dd'>Damage dealers</a>
-        <a class="select select-by-role" data-role='healer'>Healers</a>
+        <a class="link-button select select-by-role" data-role='tank'>Tanks</a>
+        <a class="link-button select select-by-role" data-role='dd'>Damage dealers</a>
+        <a class="link-button select select-by-role" data-role='healer'>Healers</a>
         /
-        <a class="select select-by-weapon" data-weapon='hitscan'>Hitscans</a>
-        <a class="select select-by-weapon" data-weapon='projectile'>Projectiles</a>
-        <a class="select select-by-weapon" data-weapon='shotgun'>Shotguns</a>
-        <a class="select select-by-weapon" data-weapon='beam'>Beams</a>
-        <a class="select select-by-weapon" data-weapon='melee'>Melee</a>
+        <a class="link-button select select-by-weapon" data-weapon='hitscan'>Hitscans</a>
+        <a class="link-button select select-by-weapon" data-weapon='projectile'>Projectiles</a>
+        <a class="link-button select select-by-weapon" data-weapon='shotgun'>Shotguns</a>
+        <a class="link-button select select-by-weapon" data-weapon='beam'>Beams</a>
+        <a class="link-button select select-by-weapon" data-weapon='melee'>Melee</a>
       </div>
     </div>
     <div class="row toprow">
-      <nav class="icon-box top-icon-box">
-        <!-- <div>OW damage chart</div> -->
+      <nav class="hero-panel top-hero-panel">
         <div class="nav nav-toggle-select">
-          <a>Filter</a>
           <i class="material-icons">filter_list</i>
         </div>
+        <div class="nav nav-toggle-sort">
+          <i class="material-icons">sort</i>
+        </div>
         <div class="nav nav-toggle-info">
-          <a>Mean DPS</a>
+          <a class="link-button">Mean DPS</a>
         </div>
       </nav>
-      <svg class="timeline-box timeScale" height="20px" width="1000px"></svg>
+      <svg class="timeline-panel timeScale"></svg>
     </div>
 
     <div class="chart"></div>
@@ -46,7 +47,8 @@
   <aside>
     <div class="panels">
       <header>
-        #damage chart
+        <!-- Overwatch damage chart -->
+        <img src="images/logo.png" alt="Overwatch damage chart">
       </header>
       <div class="distance-panel">
         <p>Distance to target: <input type="text" class="distance-input" value="5">m</p>
@@ -56,7 +58,7 @@
         <p>Damage factor = <span class="mod-result">1×<span></p>
         <div class="mod-panel mod-reduction">
           <p>Reduction</p>
-          <div class='icon-box mod-icon-box'>
+          <div class='mod-icon-panel'>
             <div class="hero-ability-icon-bg">
               <img class="hero-ability-icon" src="hero-icons/armor.png"/>
             </div>
@@ -67,7 +69,7 @@
         </div>
         <div class="mod-panel mod-boost">
           <p>Boost and amplification</p>
-          <div class='icon-box mod-icon-box'>
+          <div class='mod-icon-panel'>
             <div class="hero-ability-icon-bg">
               <img class="hero-ability-icon" src="hero-icons/damage-boost.png"/>
             </div>
@@ -102,12 +104,21 @@
     </div>
   </aside>
 
-<script src="https://d3js.org/d3.v4.min.js"  charset="utf-8"></script>
+<!-- <script src="https://d3js.org/d3.v4.min.js"  charset="utf-8"></script>
 <script src="https://d3js.org/d3-selection-multi.v1.min.js"  charset="utf-8"></script>
 <script src="https://unpkg.com/d3-simple-slider@0.2.1/build/d3-simple-slider.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dragdealer/0.9.8/dragdealer.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+ -->
+<script src="vendor/d3.v4.min.js"  charset="utf-8"></script>
+<script src="vendor/d3-selection-multi.v1.min.js"  charset="utf-8"></script>
+<script src="vendor/d3-simple-slider.js"></script>
+<script src="vendor/lodash.min.js"></script>
+<script src="vendor/handlebars.min.js"></script>
+<script src="vendor/dragdealer.min.js"></script>
+<script src="vendor/TweenMax.min.js"></script>
 
 <script id="hero-weapon-template" type="text/x-handlebars-template">
   <div class='icons'>
@@ -131,8 +142,8 @@
 </script>
 
 <script id="row-template" type="text/x-handlebars-template">
-  <div class="row" id="{{weapon.idString}}">
-    <div class="icon-box" style="background-color: {{weapon.hero.color}}">
+  <div class="row mix hero-role-{{weapon.hero.role}}" id="{{weapon.idString}}" style="order: ">
+    <div class="hero-panel" style="background-color: {{weapon.hero.color}}">
       {{> heroWeapon weapon}}
       <div class="info-string"></div>
       {{#if weapon.energy includeZero=true}}
@@ -142,7 +153,7 @@
         </div>
       {{/if}}
     </div>
-    <svg class="timeline-box"></svg>
+    <svg class="timeline-panel"></svg>
   </div>
 </script>
 
