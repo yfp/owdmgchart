@@ -17,7 +17,7 @@
         <a class="link-button select select-none">Select none</a>
         /
         <a class="link-button select select-by-role" data-role='tank'>Tanks</a>
-        <a class="link-button select select-by-role" data-role='dd'>Damage dealers</a>
+        <a class="link-button select select-by-role" data-role='dd'>Damage</a>
         <a class="link-button select select-by-role" data-role='healer'>Healers</a>
         /
         <a class="link-button select select-by-weapon" data-weapon='hitscan'>Hitscans</a>
@@ -29,13 +29,13 @@
     </div>
     <div class="row toprow">
       <nav class="hero-panel top-hero-panel">
-        <div class="nav nav-toggle-select">
+        <div class="nav nav-toggle-select" data-alttext="Toggle hero selection panel">
           <i class="material-icons">filter_list</i>
         </div>
-        <div class="nav nav-toggle-sort">
+        <div class="nav nav-toggle-sort" data-alttext="Toggle sorting">
           <i class="material-icons">sort</i>
         </div>
-        <div class="nav nav-toggle-info">
+        <div class="nav nav-toggle-info" data-alttext="Next weapon data">
           <a class="link-button">Mean DPS</a>
         </div>
       </nav>
@@ -49,6 +49,7 @@
       <header>
         <!-- Overwatch damage chart -->
         <img src="images/logo.png" alt="Overwatch damage chart">
+        <!-- <textarea class="ta"></textarea> -->
       </header>
       <div class="distance-panel">
         <p>Distance to target: <input type="text" class="distance-input" value="5">m</p>

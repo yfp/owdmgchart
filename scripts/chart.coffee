@@ -110,17 +110,15 @@ class Enemy
       when @head.registerHit(point) then CRIT
       when @body.registerHit(point) then HIT
       else MISS
-  shoot: (crosshair, radius=0, shift_x=0) ->
-    cx = cy = 0
+  shoot: (crosshair, radius=0, shift_x=0, shift_z=0) ->
+    cx = cz = 0
     if radius > 0 
-      cx = cy = 1
-      until cx*cx + cy*cy < 1.0
-        cx = 2*Math.random()-1
-        cy = 2*Math.random()-1
-      cx *= radius
-      cy *= radius
+      phi = 2*Math.PI*Math.random()
+      r = radius*Math.random()
+      cx = r*Math.cos(phi)
+      cz = r*Math.sin(phi)
     x = crosshair.x + cx + shift_x
-    z = crosshair.z + cy
+    z = crosshair.z + cz + shift_z
     @registerHit({x:x, z:z})
 
 enemy_Roadhog = do() ->
@@ -157,6 +155,7 @@ class WeaponData
     @filling = @weapon.filling or 0.5
     @is_beam = @weapon.type is "beam"
     @color = @weapon.hero.color
+    @segments_factor = (@weapon.damage.segments or 1)
 
     unless @is_beam
       @max_shot_width = shot_spacing * @filling
@@ -187,7 +186,6 @@ class WeaponData
     @shots = []
     ammo = @weapon.ammo
     total_dmg = 0
-    console.log total_time
     while t < total_time
       shot = {radius: @radius_func(ammo, t)}
       [ammo, dt, ammo_consumed] = @weapon.shot_time_func(ammo, t)
@@ -197,17 +195,26 @@ class WeaponData
         shot.ammo_mult = ammo_consumed
       if @weapon.type is "beam"
         shot.duration = @weapon.shot_time * ammo_consumed
+      if @weapon.type.match /EOT/
+        shot.duration = @weapon.damage.duration
       @shots.push shot
       t += dt
-    console.log @weapon.name, @shots.length
 
   simulate_shot_outcomes: (enemy, crosshair) ->
     total_outcomes = [0,0,0]
     for shot in @shots
       outcomes = [0,0,0]
+      if @weapon.spread?.randomly_rotated
+        random_angle = 2*Math.PI*Math.random()
+        SIN = Math.sin(random_angle)
+        COS = Math.cos(random_angle)
+      else
+        SIN = 0
+        COS = 1
       for i in [1..@pellets]
-        shift_x = @shift_func(i) 
-        hit_outcome = enemy.shoot(crosshair, shot.radius, shift_x)          
+        shift = @shift_func(i) 
+        hit_outcome = enemy.shoot(crosshair, shot.radius,
+          COS*shift[0]-SIN*shift[1], COS*shift[1]+SIN*shift[0])
         outcomes[hit_outcome] += 1
       if @weapon.crit_factor is 1
         outcomes[HIT] += outcomes[CRIT]
@@ -229,8 +236,8 @@ class WeaponData
     total_dmg = 0
     @rhkt = undefined
     for shot, index in @shots
-      shot.damage = shot.outcomes[HIT ] * @hit_dmg + 
-                    shot.outcomes[CRIT] * @crit_dmg
+      shot.damage = (shot.outcomes[HIT ] * @hit_dmg + 
+                     shot.outcomes[CRIT] * @crit_dmg) * @segments_factor
       h = @shot_dimensions(shot)
       total_dmg += shot.damage
       @rhkt ?= if total_dmg >= HOG_HP
@@ -242,11 +249,17 @@ class WeaponData
     time = last_shot.t
     if last_shot.duration?
       time += last_shot.duration
-    @dps = total_dmg / time
+    
+    @dps_raw = total_dmg / time
+    mean_damage = ( @hit_dmg  * @outcomes[HIT] +
+                    @crit_dmg * @outcomes[CRIT] ) * @pellets * @segments_factor
+    @dps_wort = mean_damage / @weapon.dps_period_base
+    @dps = mean_damage / (@weapon.dps_period_base+@weapon.dps_period_add)
     @rhkt ?= if @dps > 0
       HOG_HP / @dps
     else Infinity
     
+
     @height = 2*Math.ceil(@height/2)
 
   shot_dimensions: (shot) ->
@@ -263,6 +276,12 @@ class BeamWeaponData extends WeaponData
     shot.damage *= shot.duration * @weapon.fire_rate
     shot.dps = shot.damage / shot.duration
     shot.height = shot.dps * areascale / timescale
+    #beam mech
+
+class BioticRifleWeaponData extends WeaponData
+  shot_dimensions: (shot) ->
+    dps = shot.damage / shot.duration
+    shot.height = dps * areascale / timescale
     #beam mech
 
 class PhotonProjectorWeaponData extends BeamWeaponData
@@ -288,7 +307,11 @@ class PhotonProjectorWeaponData extends BeamWeaponData
       @height = h if h > @height
     last_shot = @shots[@shots.length-1]
     time = last_shot.t + last_shot.duration
-    @dps = total_dmg / time
+    @dps_raw = total_dmg / time
+
+    mean_damage = @outcomes[HIT] * @dmg_levels[@dmg_levels.length-1]
+    @dps_wort = mean_damage / @weapon.dps_period_base
+    @dps = mean_damage / (@weapon.dps_period_base+@weapon.dps_period_add)
     @height = 2*Math.ceil(@height/2)
 
 # info string 
@@ -306,7 +329,11 @@ info_string = do ->
     variants: [
       name: 'dps'
       text: 'Mean DPS'
-      func: (wdata) -> wdata.dps?.toFixed(3)
+      func: (wdata) -> wdata.dps?.toFixed(1)
+    ,
+      name: 'dps_wort'
+      text: 'Mean DPS w/o reload'
+      func: (wdata) -> wdata.dps_wort?.toFixed(1)
     ,
       name: 'acc'
       text: 'Accuracy'
@@ -344,7 +371,6 @@ info_string = do ->
         .text (wdata) -> info_string.text(wdata)
       hero_filter.reloadOrder()
 
-
   d3.select('.nav-toggle-info')
     .on 'click', ->
       info_string.increment()
@@ -363,10 +389,14 @@ state_data = do -> #weapons, enemy, distance, crosshair
         new PhotonProjectorWeaponData(weapon)
       when weapon.type is 'beam'
         new BeamWeaponData(weapon)
+      when weapon.type.match /EOT/
+        new BioticRifleWeaponData(weapon)
       else
         new WeaponData(weapon)
     wdata.refresh_distance(enemy, crosshair)
     list.push(wdata)
+
+  # state object
   list: list
   shot_attrs:
     height: (shot) -> shot.height
@@ -411,15 +441,18 @@ state_data = do -> #weapons, enemy, distance, crosshair
     svgs = rows.select('svg')
     svgs.selectAll('rect.shot')
         .data (wdata) -> wdata.shots
-      .transition().duration(400)
+      .transition().duration(100)
       .attrs @shot_attrs
-
+    
 # init hero rows
 hero_rows = do -> # state_data
   rows = chart.selectAll("div.row")
       .data(state_data.list)
     .enter().append (wdata) ->
       htmlToElement(row_template(wdata))
+
+  rows.select '.info-string'
+    .text (wdata) -> info_string.text(wdata)
 
   tooltip = d3.select("body").append("div")
     .attr("class", "tooltip")
@@ -469,13 +502,13 @@ hero_filter = do () ->
         h = hero_selection_el.style 'height'
         hero_selection_el.style 'height', "0px"
         hero_selection_el
-          .transition()
+          .transition().duration(400)
           .style 'height', h
       else
         h = hero_selection_el.style 'height'
         hero_selection_el.style 'height', h
         hero_selection_el
-          .transition().duration(200)
+          .transition().duration(400)
           .style 'height', "0px"
       setTimeout( ->
         h = hero_selection_el.style 'height'
@@ -523,6 +556,7 @@ hero_filter = do () ->
   sort_by_field = (field) ->
     local_f = switch field
       when 'dps' then (d) -> d.dps
+      when 'dps_wort' then (d) -> d.dps_wort
       when 'acc' then (d) -> d.outcomes[HIT]+d.outcomes[CRIT]
       when 'crit_acc' then (d) -> d.outcomes[CRIT]
       when 'rhkt' then (d) -> -d.rhkt
@@ -604,7 +638,7 @@ hero_filter = do () ->
 
   hero_filter
 
-state_data.update_damage()
+# state_data.update_damage()
 hero_filter.reloadVisibility()
 
 # distance slider
@@ -615,9 +649,9 @@ do -> #enemy, crosshair, state_data
       when isNaN(val) then 5
       when val < 0.1 then 0.1
       else val
-    state_data.refresh_distance(enemy, crosshair)
     viewport.setscale(crosshair.distance)
     viewport.updateDummyFigure()
+    state_data.refresh_distance(enemy, crosshair)
     if update_input
       slider.input.property 'value', crosshair.distance.toFixed(2)
     if update_slider
@@ -640,10 +674,11 @@ do -> #enemy, crosshair, state_data
         .tickFormat(d3.format('.1f'))
         .ticks(6)
         .default(crosshair.distance)
-        .on 'onchange', _.throttle((val) ->
+        .on 'onchange', _.throttle(
+          (val) ->
             unless local_update_dist
               update_distance(val, no, yes)
-          , 100)
+        , 100)
 
     g = d3.select("div#distance-slider").append("svg")
         .attr("width", 400)
@@ -657,18 +692,33 @@ do -> #enemy, crosshair, state_data
 
   # enemy viewport
   viewport = do -> #enemy
-
+    start_time = 0
+    events_cnt = 0
     dragstarted = (d) ->
+      start_time = Date.now()
+      events_cnt = 0
       d3.select(@).raise().classed("dragging", yes)
+
+    throttle_refresh_crosshair = _.throttle(
+      (enemy, crosshair) ->
+        viewport.update_crosshair(crosshair)
+        state_data.refresh_crosshair(enemy, crosshair)
+    , 100, leading: yes)
+    throttle_update_position = _.throttle(
+      ->
+        events_cnt += 1
+        viewport.updateDummyFigure()
+    , 16, leading: yes)
 
     dragged = (d) ->
       d.x += d3.event.dx
       d.y += d3.event.dy
-      viewport.updateDummyFigure()
-      viewport.update_crosshair(crosshair)
-      state_data.refresh_crosshair(enemy, crosshair)
+      throttle_update_position()
+      # throttle_refresh_crosshair(enemy, crosshair)
 
     dragended = (d) ->
+      duration = (Date.now() - start_time)/1000
+      throttle_refresh_crosshair(enemy, crosshair)
       d3.select(@).classed("dragging", no)
 
     viewport =
@@ -763,3 +813,47 @@ do (weapon_dict = weapon_dict) ->
           wdata = state_data.list[weapon.index]
           wdata.set_distance(crosshair.distance) 
           state_data.update_damage(weapon)
+
+# plot data calculations
+
+# download_file = (data, filename, type="text/plain") ->
+#     file = new Blob([data], {type: type})
+#     if (window.navigator.msSaveOrOpenBlob)
+#         window.navigator.msSaveOrOpenBlob(file, filename)
+#     else
+#         a = document.createElement("a")
+#         url = URL.createObjectURL(file)
+#         a.href = url
+#         a.download = filename
+#         document.body.appendChild(a)
+#         a.click()
+#         setTimeout( ->
+#             document.body.removeChild(a)
+#             window.URL.revokeObjectURL(url)
+#         , 0)
+
+# do -> 
+#   d = 0.1
+#   texts = []
+#   while d <= 50.1
+#   # do ->
+#     crosshair = {x:0, z: 2.0, distance: d}
+#     for wdata in state_data.list
+#       wdata.refresh_distance(enemy, crosshair)
+#     nums = [d].concat(wdata.dps for wdata in state_data.list)
+#     texts.push nums.join("\t")
+#     console.log(d)
+#     d+=0.1
+#   data = texts.join("\n")
+#   download_file data, "data.txt"
+
+# do -> 
+#   texts = []
+#   for wdata in state_data.list
+#     fields = [wdata.weapon.hero.name,
+#               wdata.weapon.hero.color,
+#               wdata.weapon.name ]
+#     texts.push fields.join("\t")
+#   data = texts.join("\n")
+#   download_file data, "legend.txt"
+

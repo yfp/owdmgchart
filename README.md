@@ -86,7 +86,7 @@ were analyzed from the recordings of tests in practice range.
 - Torbjorn is the only hero with 3 damaging weapon modes (primary, secondary, hammer melee).
 - All damage boosts and amplificators can sum up to 2.99×
 - Tracer's pistols are technically a shotgun weapon.
-- Genji's Fan of Blades is also technically a shotgun (with the only constant pattern in game).
+- Genji's Fan of Blades is also technically a shotgun.
 - Roadhog's secondary fire is the only one in the game with non-monotonously decreasing damage with distance.
 - Prior to nerf, McCree's Peacekeeper had the simpliest mechanics possible:
 hitscan, no spread, no falloff, no wind-up or charging.

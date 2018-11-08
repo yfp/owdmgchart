@@ -1,5 +1,7 @@
 gravity_acc = 9.0 #m/s^2
 degtan = (angle) -> Math.tan(angle/180*Math.PI) #angle/180*Math.PI
+degcos = (angle) -> Math.cos(angle/180*Math.PI) #angle/180*Math.PI
+degsin = (angle) -> Math.sin(angle/180*Math.PI) #angle/180*Math.PI
 max_arc_range = (v) => v*v/gravity_acc
 
 ramp = (values, args) ->
@@ -16,6 +18,7 @@ ramp = (values, args) ->
 
 @heros =
   Ana:          color: "#718ab3", role: 'healer'
+  Ashe:         color: "#982020", role: 'dd'
   Bastion:      color: "#7c8f7b", role: 'dd'
   Brigitte:     color: "#be736e", role: 'healer'
   Dva:          color: "#ed93c7", role: 'tank'
@@ -81,7 +84,7 @@ for name of @heros
   type: "linear projectile"
   damage: dpshot: 11
   velocity: 80 #m/s
-  spread: angle: 1.35
+  spread: angle: 1.08
   fire_rate: 12 #shots/sec
   ammo: 150
   reload_time: 2.5 #sec
@@ -176,17 +179,44 @@ for name of @heros
   fire_rate: 1#shot/sec
   ammo: 4
   reload_time: 1.5 #sec
+, # Ashe M1
+  name: "The Viper (primary)"
+  hero: @heros.Ashe
+  icon_url: "hero-icons/ashe-viper.png"
+  mousebutton: 'M1'
+  type: "hitscan"
+  damage:
+    dpshot:  [40, 20]
+    falloff: [20, 40]
+  spread:
+    max_angle: 1.85
+    spreading_ammo_range: [2, 7]
+  fire_rate: 4#shots/sec
+  ammo: 12
+  reload_time: 4.25 #sec
+, # Ashe M2
+  name: "The Viper (secondary)"
+  hero: @heros.Ashe
+  icon_url: "hero-icons/ashe-viper.png"
+  mousebutton: 'M2'
+  type: "hitscan"
+  damage:
+    dpshot:  [85, 42.5]
+    falloff: [30, 60]
+  fire_rate: 1.4#shots/sec
+  ammo: 12
+  reload_time: 4.25 #sec
 , # Bastion Recon
   name: "Configuration: Recon"
   hero: @heros.Bastion
   icon_url: 'hero-icons/bastion-recon.png'
   type: "hitscan"
   damage:
-    dpshot:  [20, 6]
+    dpshot:  [20, 10]
     falloff: [26, 50]
   spread:
     max_angle: 1.25
-    spreading_ammo_range: [5, 10]
+    spreading_ammo_range: [2, 7]
   fire_rate: 8 #shots/sec
   ammo: 25
   reload_time: 2 #sec
@@ -196,7 +226,7 @@ for name of @heros
   icon_url: 'hero-icons/bastion-sentry.png'
   type: "hitscan"
   damage:
-    dpshot:  [15,  4]
+    dpshot:  [15, 7.5]
     falloff: [35, 55]
   spread: angle: 3
   fire_rate: 30 #shots/sec
@@ -209,11 +239,16 @@ for name of @heros
   type: "projectile shotgun"
   velocity: 80 #m/s
   pellets: 11
-  damage: dpshot: 6
+  damage:
+    dpshot:  [6, 3]
+    falloff: [15, 25]
+  # damage: dpshot: 6
   spread: angle: 2.15
   ammo: 4
   fire_rate: 3 #shots/sec
   reload_time: 0.65#sec
+  dps_period_base: 1/3
+  dps_period_add: 0.65
 , # Genji M1
   name: "Shuriken"
   hero: @heros.Genji
@@ -223,10 +258,10 @@ for name of @heros
   velocity: 60#m
   damage: dpshot:  28
   ammo: 24
-  fire_rate: 1#shots/sec
+  fire_rate: 1.027 #bursts/sec
   burst:
     ammo: 3
-    delay: 0.1#sec  ### CHECK
+    delay: 0.1083#sec
   reload_time: 1.5 #sec
 , # Genji M2
   name: "Fan of Blades"
@@ -237,7 +272,13 @@ for name of @heros
   velocity: 60#m
   pellets: 3
   damage: dpshot:  28
-  spread: fixed_angle: 30
+  spread:
+    randomly_rotated: no
+    constant_angles:[
+      [-15, 0]
+      [0, 0]
+      [15, 0]
+    ]
   ammo: 24/3
   fire_rate: 1#shots/sec
   reload_time: 1.5 #sec
@@ -269,7 +310,7 @@ for name of @heros
   mousebutton: 'M1'
   type: "hitscan"
   damage:
-    dpshot:  [70, 21]
+    dpshot:  [70, 35]
     falloff: [22, 45]
   ammo: 6
   fire_rate: 2#shots/sec
@@ -319,11 +360,11 @@ for name of @heros
   icon_url: "hero-icons/soldier-rifle.png"
   type: "hitscan"
   damage:
-    dpshot:  [19, 5.7]
+    dpshot:  [19, 9.5]
     falloff: [30, 55]
   spread:
     max_angle: 2.4
-    spreading_ammo_range: [3, 6]
+    spreading_ammo_range: [6, 9]
   ammo: 25
   fire_rate: 9 #shots/sec
   reload_time: 1.5 #sec
@@ -337,7 +378,7 @@ for name of @heros
   damage: dpshot: 120
   crit_factor: 1
   ammo: 6
-  fire_rate: 1.1#shots/sec
+  fire_rate: 1/0.75#shots/sec
   reload_time: 1 #sec
 , # Reaper
   name: "Hellfire Shotguns"
@@ -376,7 +417,7 @@ for name of @heros
     dpshot: 60/7*1.75
     dps_factors: [1, 2, 3]
     level_charging_time: 2#sec
-    max_range: 10#m
+    max_range: 12#m
   fire_rate: 4 # 7 shots/sec to 4 hz ticks = factor 7/4=1.75
   ammo: 70 / 1.75
   reload_time: 1.8 #sec
@@ -399,7 +440,7 @@ for name of @heros
   icon_url: "hero-icons/torbjorn-gun.png"
   mousebutton: 'M1'
   type: "arc projectile"
-  velocity: 57#m/sec
+  velocity: 70#m/sec
   damage:
     dpshot: 70
   fire_rate: 1/0.6 #shots/sec
@@ -415,9 +456,22 @@ for name of @heros
   pellets: 10
   velocity: 80#m/sec
   damage:
-    dpshot: [15, 6]
-    falloff: [7, 20]
-  spread: angle: 4.15
+    dpshot: [12.5,  3.75]
+    falloff:[ 7,   20]
+  spread:
+    randomly_rotated: yes
+    constant_angles: [
+      [ 0.000,  0.362]
+      [-0.644,  3.098]
+      [ 3.219,  1.448]
+      [ 2.012, -2.213]
+      [-1.569, -2.977]
+      [-3.460,  0.241]
+      [-1.167, -1.247]
+      [ 0.885, -1.127]
+      [ 0.966,  0.805]
+      [-1.167,  0.885]
+    ]
   fire_rate: 1.25 #shots/sec
   ammo: 6
   reload_time: 2#sec
@@ -428,7 +482,7 @@ for name of @heros
   type: "melee"
   damage:
     dpshot: 55
-    max_range: 2#m   ### CHECK
+    max_range: 3#m  
   fire_rate: 1.25 #shots/sec
 , # Tracer
   name: "Pulse Pistols"
@@ -477,9 +531,12 @@ for name of @heros
   hero: @heros.Ana
   icon_url: "hero-icons/ana-rifle.png"
   mousebutton: 'M1'
-  type: "projectile"
+  type: "projectile EOT"
   velocity: 90#m/sec
-  damage: dpshot: 70
+  damage:
+    dpshot: 70
+    duration: 0.79#sec
+    segments: 4
   ammo: 14
   fire_rate: 1.25#shots/sec
   reload_time: 1.5 #sec
@@ -489,8 +546,11 @@ for name of @heros
   hero: @heros.Ana
   icon_url: "hero-icons/ana-rifle.png"
   mousebutton: 'M2'
-  type: "hitscan"
-  damage: dpshot: 70
+  type: "hitscan EOT"
+  damage:
+    dpshot: 70
+    duration: 0.79#sec
+    segments: 4
   ammo: 14
   fire_rate: 1.25#shots/sec
   reload_time: 1.5 #sec
@@ -513,8 +573,8 @@ for name of @heros
   damage: dpshot: 20
   burst:
     ammo: 4
-    delay: 0.125#s
-  fire_rate: 1#burst/sec
+    delay: 0.124#s
+  fire_rate: 1.07#burst/sec
   ammo: 20
   reload_time: 1.5#sec 
 , # Mercy
@@ -559,9 +619,9 @@ for name of @heros
   damage: dpshot: 46
   burst:
     ammo: 5
-    delay: 0.125#sec   #   CHECK
-  charge_delay: 3.4#sec
-  fire_rate: 1/4#burst/sec
+    delay: 0.118#sec   #   CHECK
+  charge_delay: 3.616#sec
+  fire_rate: 1/4.67167#burst/sec
   ammo: 20
   reload_time: 2#sec
 ]
@@ -622,12 +682,12 @@ for name in ['primary', 'secondary']
           return 0
         @damage.dpshot * (1+@energy/100)
 
-do(w = @weapon_dict['Fan of Blades']) ->
-  w.make_shift_func = 
-    (distance) ->
-      radius = degtan(@spread.fixed_angle/2) * distance
-      (pellet) ->
-        radius * (pellet - 2)
+# do(w = @weapon_dict['Fan of Blades']) ->
+#   w.make_shift_func = 
+#     (distance) ->
+#       radius = degtan(@spread.fixed_angle/2) * distance
+#       (pellet) ->
+#         radius * (pellet - 2)
 
 for weapon in @weapons
   do(w=weapon) ->
@@ -636,6 +696,8 @@ for weapon in @weapons
     if w.type == "arc projectile"
       w.damage.max_range = max_arc_range(w.velocity)
       w.crit_factor ?= 1
+    if w.type.match /EOT/
+      w.damage.dpshot /= w.damage.segments
 
     w.pellets ?= 1
     w.crit_factor ?= if w.type in ['melee', 'beam'] then 1 else 2
@@ -706,7 +768,27 @@ for weapon in @weapons
         (distance) -> @charge_delay + distance / @velocity
       else (distance) -> @charge_delay
 
-    w.make_shift_func ?= (distance) -> (pellet) -> 0
+    w.make_shift_func ?= if w.spread?.constant_angles?
+        unit_shifts = for as in w.spread.constant_angles
+          uy = degcos(as[0])*degcos(as[1])
+          # cz, and cx on distance 1
+          cx = degsin(as[0])*degcos(as[1])/uy
+          cz = degsin(as[1])/uy
+          [cx, cz]
+        (distance) ->
+          shifts = for us in unit_shifts
+            [us[0]*distance, us[1]*distance]
+          (pellet) -> shifts[pellet-1]
+      else (distance) -> (pellet) -> [0, 0]
+
+    w.dps_period_base ?= w.shot_time
+    if w.burst?
+      w.dps_period_base = w.dps_period_base / w.burst.ammo
+
+    w.dps_period_add ?= if w.ammo is Infinity
+      0
+    else w.reload_time/w.ammo
+
 
 @modificator = do ->
   obj = {factor: 1}
