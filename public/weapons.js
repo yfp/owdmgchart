@@ -777,7 +777,7 @@
     {
       name: "Pulse Pistols",
       hero: this.heros.Tracer,
-      icon_url: "hero-icons/sombra-pistol.png",
+      icon_url: "hero-icons/tracer-pistol.png",
       type: "hitscan shotgun",
       pellets: 2,
       damage: {
