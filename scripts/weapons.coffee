@@ -232,6 +232,7 @@ for name of @heros
   fire_rate: 30 #shots/sec
   ammo: 300
   reload_time: 2 #sec
+  crit_factor: 1
 , # Doomfist
   name: "Hand Cannon"
   hero: @heros.Doomfist

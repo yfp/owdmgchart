@@ -422,8 +422,8 @@
       },
       fire_rate: 30, //shots/sec
       ammo: 300,
-      reload_time: 2 //sec
-    // Doomfist
+      reload_time: 2, //sec
+      crit_factor: 1 // Doomfist
     },
     {
       name: "Hand Cannon",
