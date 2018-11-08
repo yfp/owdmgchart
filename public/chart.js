@@ -268,7 +268,7 @@
           if (this.weapon.type === "beam") {
             shot.duration = this.weapon.shot_time * ammo_consumed;
           }
-          if (this.weapon.type.match(/EOT/)) {
+          if (this.weapon.hero.name === 'Ana') {
             shot.duration = this.weapon.damage.duration;
           }
           this.shots.push(shot);
@@ -694,11 +694,11 @@
         hero_selection_el.classed('hidden-row', !toggle);
         h = hero_selection_el.style('height');
         hero_selection_el.style('height', "0px");
-        hero_selection_el.transition().duration(400).style('height', h);
+        hero_selection_el.transition().duration(100).style('height', h);
       } else {
         h = hero_selection_el.style('height');
         hero_selection_el.style('height', h);
-        hero_selection_el.transition().duration(400).style('height', "0px");
+        hero_selection_el.transition().duration(100).style('height', "0px");
       }
       return setTimeout(function() {
         h = hero_selection_el.style('height');
@@ -916,7 +916,9 @@
         if (!local_update_dist) {
           return update_distance(val, false, true);
         }
-      }, 100));
+      }, 25, {
+        leading: false
+      }));
       g = d3.select("div#distance-slider").append("svg").attr("width", 400).attr("height", 50).append("g").attr("transform", "translate(20,10)");
       g.call(slider);
       return {
@@ -941,7 +943,6 @@
         leading: true
       });
       throttle_update_position = _.throttle(function() {
-        events_cnt += 1;
         return viewport.updateDummyFigure();
       }, 16, {
         leading: true
@@ -953,8 +954,6 @@
       };
       // throttle_refresh_crosshair(enemy, crosshair)
       dragended = function(d) {
-        var duration;
-        duration = (Date.now() - start_time) / 1000;
         throttle_refresh_crosshair(enemy, crosshair);
         return d3.select(this).classed("dragging", false);
       };

@@ -195,7 +195,7 @@ class WeaponData
         shot.ammo_mult = ammo_consumed
       if @weapon.type is "beam"
         shot.duration = @weapon.shot_time * ammo_consumed
-      if @weapon.type.match /EOT/
+      if @weapon.hero.name is 'Ana'
         shot.duration = @weapon.damage.duration
       @shots.push shot
       t += dt
@@ -502,13 +502,13 @@ hero_filter = do () ->
         h = hero_selection_el.style 'height'
         hero_selection_el.style 'height', "0px"
         hero_selection_el
-          .transition().duration(400)
+          .transition().duration(100)
           .style 'height', h
       else
         h = hero_selection_el.style 'height'
         hero_selection_el.style 'height', h
         hero_selection_el
-          .transition().duration(400)
+          .transition().duration(100)
           .style 'height', "0px"
       setTimeout( ->
         h = hero_selection_el.style 'height'
@@ -678,7 +678,7 @@ do -> #enemy, crosshair, state_data
           (val) ->
             unless local_update_dist
               update_distance(val, no, yes)
-        , 100)
+        , 25, leading: no)
 
     g = d3.select("div#distance-slider").append("svg")
         .attr("width", 400)
@@ -706,7 +706,6 @@ do -> #enemy, crosshair, state_data
     , 100, leading: yes)
     throttle_update_position = _.throttle(
       ->
-        events_cnt += 1
         viewport.updateDummyFigure()
     , 16, leading: yes)
 
@@ -717,7 +716,6 @@ do -> #enemy, crosshair, state_data
       # throttle_refresh_crosshair(enemy, crosshair)
 
     dragended = (d) ->
-      duration = (Date.now() - start_time)/1000
       throttle_refresh_crosshair(enemy, crosshair)
       d3.select(@).classed("dragging", no)
 
