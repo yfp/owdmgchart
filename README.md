@@ -80,6 +80,10 @@ were analyzed from the recordings of tests in practice range.
 - d3js-simple-slider
 - google material-icons
 
+# License
+
+The code is distributed under under *MIT License*.
+
 
 # Fun facts
 

@@ -415,9 +415,55 @@ svg .figure-crosshair-circle{
     max-height: 1000px;
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    align-items: flex-center;
+    max-height: 350px;
+  }
+
+  .enemy-viewport{
+    order: 2;
+  }
+}
+
+@media only screen and (max-width: 660px) {
+  aside{
+    max-width: 1000px;
+    max-height: 1000px;
+    display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
-
+    align-items: flex-center;
   }
+
+  .enemy-viewport{
+    order: 0;
+  }
+}
+
+.buymeacoffee{
+  width: 330px;
+}
+
+p.buymeacoffee-text{
+  margin: 4px 2px 2px 2px;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  color: #202020;
+}
+
+p.buymeacoffee-text a{
+  padding: 1px 2px 1px 2px;
+  background-color: #f67c68;
+  border-radius: 3px;
+  color: white;
+  text-decoration: none;
+}
+
+p.buymeacoffee-note{
+  margin: 2px 2px 2px 2px;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  color: #808080;
 }
