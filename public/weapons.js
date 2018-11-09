@@ -697,7 +697,7 @@
       type: "projectile",
       velocity: 20, //m/s
       damage: {
-        dpshot: 60 // 6-60
+        dpshot: 120 // 6-60
       },
       fire_rate: 1 / (1 + 1 + 0.063), // shots/sec  0.2-1 sec = 0.063
       charge_delay: 1 + 1, //sec  
