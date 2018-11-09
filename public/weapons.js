@@ -757,7 +757,7 @@
     [-1.167,
     0.885]]
       },
-      fire_rate: 1.25, //shots/sec
+      fire_rate: 1 / 0.6, //shots/sec
       ammo: 6,
       reload_time: 2 //sec
     // Torbjorn hammer
