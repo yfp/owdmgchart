@@ -338,8 +338,10 @@
           shot.damage = (shot.outcomes[HIT] * this.hit_dmg + shot.outcomes[CRIT] * this.crit_dmg) * this.segments_factor;
           h = this.shot_dimensions(shot);
           total_dmg += shot.damage;
-          if (this.rhkt == null) {
-            this.rhkt = total_dmg >= HOG_HP ? shot.t + (shot.duration ? (total_dmg - HOG_HP) / shot.damage * shot.duration : 0) : void 0;
+          if (total_dmg >= HOG_HP) {
+            if (this.rhkt == null) {
+              this.rhkt = shot.t + (shot.duration != null ? shot.duration * (HOG_HP + shot.damage - total_dmg) / shot.damage : 0);
+            }
           }
           if (h > this.height) {
             this.height = h;

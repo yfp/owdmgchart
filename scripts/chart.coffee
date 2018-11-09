@@ -240,9 +240,9 @@ class WeaponData
                      shot.outcomes[CRIT] * @crit_dmg) * @segments_factor
       h = @shot_dimensions(shot)
       total_dmg += shot.damage
-      @rhkt ?= if total_dmg >= HOG_HP
-        shot.t + if shot.duration
-          (total_dmg - HOG_HP)/shot.damage*shot.duration
+      if total_dmg >= HOG_HP
+        @rhkt ?= shot.t + if shot.duration?
+          shot.duration*(HOG_HP+shot.damage-total_dmg)/shot.damage
         else 0
       @height = h if h > @height
     last_shot = @shots[@shots.length-1]
