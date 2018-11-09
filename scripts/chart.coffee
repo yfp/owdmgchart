@@ -615,7 +615,7 @@ hero_filter = do () ->
     .on 'click', =>
       for weapon in @weapons
         weapon.visible = yes
-      reloadVisibility()
+      hero_filter.reloadVisibility()
   d3.select('.select-none')
     .on 'click', ->
       for weapon in weapons

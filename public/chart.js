@@ -843,7 +843,7 @@
         weapon = ref[j];
         weapon.visible = true;
       }
-      return reloadVisibility();
+      return hero_filter.reloadVisibility();
     });
     d3.select('.select-none').on('click', function() {
       var j, len, weapon;
