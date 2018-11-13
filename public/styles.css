@@ -165,10 +165,12 @@ svg.timeline-panel{
 
 div.info-string{
   text-align: right;
-  min-width: 50px;
-  max-width: 50px;
+  min-width: 48px;
+  max-width: 48px;
   color: white;
   left: 100px;
+  margin-right:2px;
+  /*border:1px solid black;*/
 }
 
 .hero-ability-icon-bg{
