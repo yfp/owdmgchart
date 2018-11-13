@@ -547,6 +547,7 @@
       str = info_string.cv().text;
       return d3.select(this).select('a').text(str);
     });
+    d3.select('span.mail-address').text('trahcgmdwo'.split('').reverse().join('') + '@' + 'moc.liamg'.split('').reverse().join(''));
     return info_string;
   })();
 

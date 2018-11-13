@@ -414,13 +414,18 @@ svg .figure-crosshair-circle{
 
   aside{
     max-width: 1000px;
-    max-height: 1000px;
+    max-height: 350px;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+    justify-content: flex-end;
     align-content: center;
-    align-items: flex-center;
-    max-height: 350px;
+    
+    /*align-items: flex-center;*/
+  }
+
+  .contacts{
+    margin-top: 20px;
   }
 
   .enemy-viewport{
@@ -444,15 +449,26 @@ svg .figure-crosshair-circle{
   }
 }
 
-.buymeacoffee{
+.aside-note{
   width: 330px;
 }
 
-p.buymeacoffee-text{
-  margin: 4px 2px 2px 2px;
-  padding: 0px 0px 0px 0px;
+.aside-note p{
   text-align: center;
   color: #202020;
+  margin: 4px 0px 2px 0px;
+  padding: 0px 0px 0px 0px;
+}
+
+.contacts svg{
+  vertical-align: -20%;
+  margin-right: 3px; 
+}
+
+.contacts i{
+  vertical-align: -30%;
+  color: #202020;
+  margin-left: 5px;
 }
 
 p.buymeacoffee-text a{
@@ -465,7 +481,5 @@ p.buymeacoffee-text a{
 
 p.buymeacoffee-note{
   margin: 2px 2px 2px 2px;
-  padding: 0px 0px 0px 0px;
-  text-align: center;
   color: #808080;
 }

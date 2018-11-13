@@ -378,6 +378,9 @@ info_string = do ->
       str = info_string.cv().text
       d3.select(@).select('a').text str
 
+  d3.select('span.mail-address')
+    .text 'trahcgmdwo'.split('').reverse().join('') + '@' + 'moc.liamg'.split('').reverse().join('')
+
   info_string
 
 chart = d3.select(".chart")
