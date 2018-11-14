@@ -287,10 +287,11 @@
       icon_url: "hero-icons/winston-tesla.png",
       type: "beam",
       damage: {
-        dpshot: 3,
+        dps: 60, //hp/sec
         max_range: 8
       },
-      fire_rate: 20, //shots/sec
+      ammo_usage: 20, //shots/sec
+      tick_rate: 20, //ticks/sec
       ammo: 100,
       reload_time: 1.5 //sec
     // Wrecking Ball
@@ -322,11 +323,12 @@
       type: "beam",
       energy: 0,
       damage: {
-        dpshot: 4.75 * 4,
+        dps: 95, //hp/sec
         max_range: 16 //m
       },
-      fire_rate: 5, // 20 shots/sec to 5hz ticks = factor 4
-      ammo: 100 / 4,
+      ammo_usage: 20, //rounds/sec
+      tick_rate: 5, // ticks/sec
+      ammo: 100,
       reload_time: 1.5 //sec
     // Zarya M2
     },
@@ -566,10 +568,11 @@
       type: "beam",
       velocity: 20, //m/sec
       damage: {
-        dpshot: 2.25,
+        dps: 45, //hp/sec
         max_range: 10 //m
       },
-      fire_rate: 20, //shots/sec
+      ammo_usage: 20, //shots/sec
+      tick_rate: 20, //ticks/sec
       ammo: 200,
       reload_time: 1.5 //sec
     // Mei M2
@@ -677,15 +680,16 @@
       mousebutton: 'M1',
       type: "beam",
       damage: {
-        dpshot: 60 / 7 * 1.75,
+        dps: 60, //hp/sec
         dps_factors: [1,
     2,
     3],
         level_charging_time: 2, //sec
         max_range: 12 //m
       },
-      fire_rate: 4, // 7 shots/sec to 4 hz ticks = factor 7/4=1.75
-      ammo: 70 / 1.75,
+      ammo_usage: 7, //rounds/sec
+      tick_rate: 20, //ticks/sec
+      ammo: 70,
       reload_time: 1.8 //sec
     // Symmetra M2 ### CHECK thoroughly
     },
@@ -922,13 +926,12 @@
       icon_url: "hero-icons/moira-grasp.png",
       type: "beam",
       damage: {
-        dpshot: 50,
+        dps: 50, //hp/sec
         max_range: 21 //m
       },
-      fire_rate: 1, //shots/sec
-      ammo: 17,
-      reload_time: 0 //sec
-    // Zenyatta M1
+      ammo_usage: void 0,
+      tick_rate: 20, //ticks/sec
+      ammo: 2e308 // Zenyatta M1
     },
     {
       name: "Orb of Destruction",
@@ -982,7 +985,6 @@
     w.damage_factor_func = function(ammo, t) {
       var n;
       n = Math.floor(t / chtime);
-      console.log(n);
       if (n >= levels.length) {
         n = levels.length - 1;
       }
@@ -1088,11 +1090,21 @@
       if (w.type === 'melee') {
         w.ammo = 2e308;
       }
-      if (w.shot_time == null) {
-        w.shot_time = 1 / w.fire_rate;
-      }
       if (w.charge_delay == null) {
         w.charge_delay = 0;
+      }
+      if (w.type === 'beam') {
+        w.damage.dpshot = w.damage.dps / w.tick_rate;
+        w.fire_rate = w.tick_rate;
+        if (w.ammo === 2e308) {
+          w.ammo = 17 * w.tick_rate; // we 'split' infinite duration into chunks of 17 seconds
+          w.reload_time = 0; //sec
+        } else {
+          w.ammo *= w.tick_rate / w.ammo_usage;
+        }
+      }
+      if (w.shot_time == null) {
+        w.shot_time = 1 / w.fire_rate;
       }
       if (w.damage_factor_func == null) {
         w.damage_factor_func = function(ammo, t) {
