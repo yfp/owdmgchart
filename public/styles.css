@@ -444,6 +444,9 @@ svg .figure-crosshair-circle{
     align-items: flex-center;
   }
 
+  .contacts{
+    margin-top: 0px;
+  }
   .enemy-viewport{
     order: 0;
   }
