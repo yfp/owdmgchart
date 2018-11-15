@@ -420,7 +420,7 @@ for name of @heros
   damage:
     dps: 60#hp/sec
     dps_factors: [1, 2, 3]
-    level_charging_time: 2#sec
+    level_charging_time: 1.6#sec
     max_range: 12#m
   ammo_usage: 7#rounds/sec
   tick_rate: 20#ticks/sec

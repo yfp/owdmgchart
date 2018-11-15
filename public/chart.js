@@ -356,6 +356,8 @@
         mean_damage = (this.hit_dmg * this.outcomes[HIT] + this.crit_dmg * this.outcomes[CRIT]) * this.pellets * this.segments_factor;
         this.dps_wort = mean_damage / this.weapon.dps_period_base;
         this.dps = mean_damage / (this.weapon.dps_period_base + this.weapon.dps_period_add);
+        this.accuracy = total_dmg > 0 ? this.outcomes[HIT] + this.outcomes[CRIT] : 0;
+        this.crit_accuracy = total_dmg > 0 ? this.outcomes[CRIT] : 0;
         if (this.rhkt == null) {
           this.rhkt = this.dps > 0 ? HOG_HP / this.dps : 2e308;
         }
@@ -446,6 +448,8 @@
       mean_damage = this.outcomes[HIT] * this.dmg_levels[this.dmg_levels.length - 1];
       this.dps_wort = mean_damage / this.weapon.dps_period_base;
       this.dps = mean_damage / (this.weapon.dps_period_base + this.weapon.dps_period_add);
+      this.accuracy = total_dmg > 0 ? 1 : 0;
+      this.crit_accuracy = 0;
       return this.height = 2 * Math.ceil(this.height / 2);
     }
 
@@ -493,7 +497,7 @@
           text: 'Accuracy',
           func: function(wdata) {
             var acc;
-            acc = wdata.outcomes[HIT] + wdata.outcomes[CRIT];
+            acc = wdata.accuracy;
             return percent_str(acc);
           }
         },
@@ -505,7 +509,7 @@
             if (wdata.weapon.crit_factor === 1) {
               return 'n/a';
             } else {
-              acc = wdata.outcomes[CRIT];
+              acc = wdata.crit_accuracy;
               return percent_str(acc);
             }
           }
@@ -768,11 +772,15 @@
             };
           case 'acc':
             return function(d) {
-              return d.outcomes[HIT] + d.outcomes[CRIT];
+              return d.accuracy;
             };
           case 'crit_acc':
             return function(d) {
-              return d.outcomes[CRIT];
+              if (d.weapon.crit_factor === 1) {
+                return -1;
+              } else {
+                return d.crit_accuracy;
+              }
             };
           case 'rhkt':
             return function(d) {

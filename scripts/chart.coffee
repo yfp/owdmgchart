@@ -255,6 +255,12 @@ class WeaponData
                     @crit_dmg * @outcomes[CRIT] ) * @pellets * @segments_factor
     @dps_wort = mean_damage / @weapon.dps_period_base
     @dps = mean_damage / (@weapon.dps_period_base+@weapon.dps_period_add)
+    @accuracy = if total_dmg > 0
+      @outcomes[HIT] + @outcomes[CRIT]
+    else 0
+    @crit_accuracy = if total_dmg > 0
+      @outcomes[CRIT]
+    else 0
     @rhkt ?= if @dps > 0
       HOG_HP / @dps
     else Infinity
@@ -312,6 +318,8 @@ class PhotonProjectorWeaponData extends BeamWeaponData
     mean_damage = @outcomes[HIT] * @dmg_levels[@dmg_levels.length-1]
     @dps_wort = mean_damage / @weapon.dps_period_base
     @dps = mean_damage / (@weapon.dps_period_base+@weapon.dps_period_add)
+    @accuracy = if total_dmg > 0 then 1 else 0
+    @crit_accuracy = 0
     @height = 2*Math.ceil(@height/2)
 
 # info string 
@@ -338,7 +346,7 @@ info_string = do ->
       name: 'acc'
       text: 'Accuracy'
       func: (wdata) ->
-        acc = wdata.outcomes[HIT]+wdata.outcomes[CRIT]
+        acc = wdata.accuracy
         percent_str acc
     ,
       name: 'crit_acc'
@@ -347,7 +355,7 @@ info_string = do ->
         if wdata.weapon.crit_factor is 1
           'n/a'
         else
-          acc = wdata.outcomes[CRIT]
+          acc = wdata.crit_accuracy
           percent_str acc
     ,
       name: 'rhkt'
@@ -560,8 +568,8 @@ hero_filter = do () ->
     local_f = switch field
       when 'dps' then (d) -> d.dps
       when 'dps_wort' then (d) -> d.dps_wort
-      when 'acc' then (d) -> d.outcomes[HIT]+d.outcomes[CRIT]
-      when 'crit_acc' then (d) -> d.outcomes[CRIT]
+      when 'acc' then (d) -> d.accuracy
+      when 'crit_acc' then (d) -> (if d.weapon.crit_factor is 1 then -1 else d.crit_accuracy)
       when 'rhkt' then (d) -> -d.rhkt
       else (d) -> -d.weapon.index
     (a, b) ->
