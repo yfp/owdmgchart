@@ -179,6 +179,20 @@
   </div>
 </script>
 
+<script language="javascript">
+
+var href = location.href;
+href = href.split('#');
+if(href.length>1 && href[1] == 'nightmode'){
+  var link = document.createElement( "link" );
+  link.href = "nightmode.css";
+  link.type = "text/css";
+  link.rel = "stylesheet";
+  link.media = "screen,print";
+
+  document.getElementsByTagName( "head" )[0].appendChild( link );
+}
+</script>
 
 <script language="javascript" src="weapons.js"></script>
 <script language="javascript" src="chart.js"></script>

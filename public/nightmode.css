@@ -1,0 +1,42 @@
+body{
+  background-color: black;  
+  color: #ddd;
+}
+
+header img{
+	-webkit-filter: invert(100%);
+    filter: invert(100%);
+}
+
+svg.figure_chart{
+  background: -moz-linear-gradient(bottom, #abe6f2 0%, #fff 50%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(bottom, #abe6f2 0%,#fff 50%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to top, #348 0%,#000 50%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.figure_chart_help{
+  color: #888;
+  text-align: right;
+  text-shadow: 0 0 5px #348;
+}
+
+input.distance-input{
+	background-color: black;
+	color: #ddd;
+}
+
+.aside-note p{
+	color: #888;
+}
+
+.aside-note p a{
+	color: #933;
+}
+
+.contacts svg path{
+	fill: #888;
+}
+
+p.buymeacoffee-text a{
+	color: #ddd;
+}
