@@ -490,7 +490,7 @@
     0]]
       },
       ammo: 24 / 3,
-      fire_rate: 1, //shots/sec
+      fire_rate: 1.33, //shots/sec
       reload_time: 1.5 //sec
     // Hanzo
     },
