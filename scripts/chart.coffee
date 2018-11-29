@@ -457,17 +457,31 @@ state_data = do -> #weapons, enemy, distance, crosshair
     
 # init hero rows
 hero_rows = do -> # state_data
+  tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
   rows = chart.selectAll("div.row")
       .data(state_data.list)
     .enter().append (wdata) ->
       htmlToElement(row_template(wdata))
 
+  rows.select('.hero-panel')
+    .on "mouseover", (wdata) ->
+        tooltip.transition().duration(200)
+          .style("opacity", .9)
+        tooltip.html("<b>#{wdata.weapon.hero.name}</b> (#{wdata.weapon.hero.role})<br/>#{wdata.weapon.name}")
+          .style("left", "#{d3.event.pageX}px")
+          .style("top", "#{d3.event.pageY - 28}px")
+     .on "mouseout", (d) ->
+         tooltip.transition()
+           .duration(500)
+           .style("opacity", 0)
+
   rows.select '.info-string'
     .text (wdata) -> info_string.text(wdata)
 
-  tooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("opacity", 0)
+
+
 
   svgs  = rows.select('svg')
     .style 'min-width', chart_width

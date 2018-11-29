@@ -47,11 +47,11 @@
     },
     Ashe: {
       color: "#982020",
-      role: 'dd'
+      role: 'damage'
     },
     Bastion: {
       color: "#7c8f7b",
-      role: 'dd'
+      role: 'damage'
     },
     Brigitte: {
       color: "#be736e",
@@ -63,19 +63,19 @@
     },
     Doomfist: {
       color: "#815049",
-      role: 'dd'
+      role: 'damage'
     },
     Genji: {
       color: "#97ef43",
-      role: 'dd'
+      role: 'damage'
     },
     Hanzo: {
       color: "#b9b48a",
-      role: 'dd'
+      role: 'damage'
     },
     Junkrat: {
       color: "#ecbd53",
-      role: 'dd'
+      role: 'damage'
     },
     Lucio: {
       color: "#85c952",
@@ -83,11 +83,11 @@
     },
     McCree: {
       color: "#ae595c",
-      role: 'dd'
+      role: 'damage'
     },
     Mei: {
       color: "#6faced",
-      role: 'dd'
+      role: 'damage'
     },
     Mercy: {
       color: "#ebe8bb",
@@ -103,11 +103,11 @@
     },
     Pharah: {
       color: "#3e7dca",
-      role: 'dd'
+      role: 'damage'
     },
     Reaper: {
       color: "#7d3e51",
-      role: 'dd'
+      role: 'damage'
     },
     Reinhardt: {
       color: "#929da3",
@@ -119,27 +119,27 @@
     },
     Soldier: {
       color: "#697794",
-      role: 'dd'
+      role: 'damage'
     },
     Sombra: {
       color: "#7359ba",
-      role: 'dd'
+      role: 'damage'
     },
     Symmetra: {
       color: "#8ebccc",
-      role: 'dd'
+      role: 'damage'
     },
     Torbjorn: {
       color: "#c0726e",
-      role: 'dd'
+      role: 'damage'
     },
     Tracer: {
       color: "#d79342",
-      role: 'dd'
+      role: 'damage'
     },
     Widowmaker: {
       color: "#9e6aa8",
-      role: 'dd'
+      role: 'damage'
     },
     WreckingBall: {
       color: "#e6a027",

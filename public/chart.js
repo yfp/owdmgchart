@@ -656,13 +656,19 @@
   // init hero rows
   hero_rows = (function() { // state_data
     var rows, shots, svgs, tooltip;
+    tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
     rows = chart.selectAll("div.row").data(state_data.list).enter().append(function(wdata) {
       return htmlToElement(row_template(wdata));
+    });
+    rows.select('.hero-panel').on("mouseover", function(wdata) {
+      tooltip.transition().duration(200).style("opacity", .9);
+      return tooltip.html(`<b>${wdata.weapon.hero.name}</b> (${wdata.weapon.hero.role})<br/>${wdata.weapon.name}`).style("left", `${d3.event.pageX}px`).style("top", `${d3.event.pageY - 28}px`);
+    }).on("mouseout", function(d) {
+      return tooltip.transition().duration(500).style("opacity", 0);
     });
     rows.select('.info-string').text(function(wdata) {
       return info_string.text(wdata);
     });
-    tooltip = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
     svgs = rows.select('svg').style('min-width', chart_width).style('max-width', chart_width).attrs({
       viewBox: `0 -100 ${chart_width} 200`
     });
