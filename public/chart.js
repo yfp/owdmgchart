@@ -219,6 +219,7 @@
         shot_spacing = timescale * (((ref = this.weapon.burst) != null ? ref.delay : void 0) || this.weapon.shot_time);
         this.filling = this.weapon.filling || 0.5;
         this.is_beam = this.weapon.type === "beam";
+        this.is_beam_or_melee = this.weapon.type === "beam" || this.weapon.type === "melee";
         this.color = this.weapon.hero.color;
         this.segments_factor = this.weapon.damage.segments || 1;
         if (!this.is_beam) {
@@ -321,13 +322,13 @@
       calculate_shots_damage() {
         var h, index, j, k, key, last_shot, len, len1, mean_damage, ref, ref1, shot, time, total_dmg;
         this.height = 0;
-        this.hit_dmg = this.basic_dmg * modificator.factor;
+        this.hit_dmg = this.basic_dmg * (this.is_beam_or_melee ? modificator.factor_mb : modificator.factor);
         this.crit_dmg = this.hit_dmg * this.weapon.crit_factor;
         if (modificator.mods.armor.on) {
           ref = ['hit_dmg', 'crit_dmg'];
           for (j = 0, len = ref.length; j < len; j++) {
             key = ref[j];
-            this[key] = modificator.mods.armor.func(this[key]);
+            this[key] = modificator.mods.armor.func(this[key], this.is_beam);
           }
         }
         total_dmg = 0;
@@ -407,7 +408,7 @@
     calculate_shots_damage() {
       var basic_dmg, dmg, factor, h, index, j, k, last_shot, len, len1, mean_damage, ref, ref1, shot, time, total_dmg;
       this.height = 30;
-      this.hit_dmg = this.basic_dmg * modificator.factor;
+      this.hit_dmg = this.basic_dmg * modificator.factor_mb;
       this.dmg_levels = [];
       ref = this.weapon.damage.dps_factors;
       for (j = 0, len = ref.length; j < len; j++) {
@@ -421,7 +422,7 @@
           results = [];
           for (k = 0, len1 = ref1.length; k < len1; k++) {
             dmg = ref1[k];
-            results.push(modificator.mods.armor.func(dmg));
+            results.push(modificator.mods.armor.func(dmg, false));
           }
           return results;
         }).call(this);
@@ -1029,6 +1030,9 @@
     set_multiplier_string = function() {
       var str;
       str = `${this.modificator.factor}×`;
+      if (modificator.mods.ampl_matrix.on) {
+        str += `/${this.modificator.factor_mb}×`;
+      }
       if (modificator.mods.armor.on) {
         str += " – armor";
       }

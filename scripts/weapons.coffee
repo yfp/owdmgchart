@@ -20,6 +20,7 @@ ramp = (values, args) ->
   Ana:          color: "#718ab3", role: 'healer'
   Ashe:         color: "#982020", role: 'damage'
   Bastion:      color: "#7c8f7b", role: 'damage'
+  Baptiste:     color: "#5f9985", role: 'healer'
   Brigitte:     color: "#be736e", role: 'healer'
   Dva:          color: "#ed93c7", role: 'tank'
   Doomfist:     color: "#815049", role: 'damage'
@@ -220,7 +221,7 @@ for name of @heros
     max_angle: 1.25
     spreading_ammo_range: [2, 7]
   fire_rate: 8 #shots/sec
-  ammo: 25
+  ammo: 35
   reload_time: 2 #sec
 , # Bastion Sentry
   name: "Configuration: Sentry"
@@ -230,7 +231,10 @@ for name of @heros
   damage:
     dpshot:  [15, 7.5]
     falloff: [35, 55]
-  spread: angle: 3
+  spread:
+    max_angle: 3.0*0.67 # Reversed spread
+    min_angle: 3.0
+    spreading_ammo_range: [5, 10] # CHECK
   fire_rate: 30 #shots/sec
   ammo: 300
   reload_time: 2 #sec
@@ -325,8 +329,8 @@ for name of @heros
   mousebutton: 'M2'
   type: "hitscan"
   damage:
-    dpshot:  [45, 13.5]
-    falloff: [18, 30]
+    dpshot:  [50, 25]
+    falloff: [20, 40]
   spread: angle: 6.50
   crit_factor: 1
   ammo: 6
@@ -340,7 +344,7 @@ for name of @heros
   type: "beam"
   velocity: 20#m/sec
   damage:
-    dps: 45#hp/sec
+    dps: 55#hp/sec
     max_range: 10#m
   ammo_usage: 20#shots/sec
   tick_rate:  20#ticks/sec
@@ -364,7 +368,7 @@ for name of @heros
   icon_url: "hero-icons/soldier-rifle.png"
   type: "hitscan"
   damage:
-    dpshot:  [19, 9.5]
+    dpshot:  [20, 10]
     falloff: [30, 55]
   spread:
     max_angle: 2.4
@@ -560,6 +564,21 @@ for name of @heros
   fire_rate: 1.25#shots/sec
   reload_time: 1.5 #sec
   crit_factor: 1
+, # Baptiste
+  name: "Biotic launcher"
+  hero: @heros.Baptiste
+  icon_url: "hero-icons/baptiste-launcher.png"
+  # mousebutton: 'M1'
+  type: "hitscan"
+  damage:
+    dpshot:  [25, 12.5]
+    falloff: [20, 40]  ## CHECK
+  burst:
+    ammo: 3
+    delay: 0.1#s
+  fire_rate: 1.5#burst/sec
+  ammo: 45
+  reload_time: 1.5#sec 
 , # Brigitte
   name: "Rocket Flail"
   hero: @heros.Brigitte
@@ -760,7 +779,8 @@ for weapon in @weapons
           (ammo, t) -> radius
       when w.spread?.max_angle?
         range = w.spread.spreading_ammo_range
-        angle_rad_func = ramp([w.spread.max_angle/180*Math.PI, 0],
+        min_angle = w.spread.min_angle/180*Math.PI or 0
+        angle_rad_func = ramp([w.spread.max_angle/180*Math.PI, min_angle],
           [w.ammo-range[1], w.ammo-range[0]]) 
         (distance) ->
           (ammo, t) ->
@@ -803,19 +823,28 @@ for weapon in @weapons
 
 
 @modificator = do ->
-  obj = {factor: 1}
+  obj = {factor: 1, factor_mb: 1}
   obj.mods = 
     armor:
       color: "#fac50e" #@heros.Torbjorn.color
-      func: (dmg) -> if dmg > 10 then dmg-5 else dmg/2
+      func: (dmg, isBeam=no) ->
+        if isBeam
+          dmg*0.8
+        else if dmg > 6 then dmg-3 else dmg/2
     nanoboost_def:
       color: @heros.Ana.color
+    take_a_breather:
+      color: "#f8eb00"
+    fortify:
+      color: @heros.Orisa.color
     damage_boost:
       color: @heros.Pharah.color
     supercharger:
       color: @heros.Orisa.color
     nanoboost_off:
       color: @heros.Ana.color
+    ampl_matrix:
+      color: "#75bfea"
     discord:
       color: "#7b539c"
 
@@ -831,8 +860,15 @@ for weapon in @weapons
     percent += 30  if @mods.damage_boost.on
     percent += 50  if @mods.supercharger.on
     percent += 50  if @mods.nanoboost_off.on
-    percent *= 1.3 if @mods.discord.on
-    percent *= 0.5 if @mods.nanoboost_def.on
-    @factor = percent / 100
+    percent_hs = percent
+    percent_hs *= 2  if @mods.ampl_matrix.on
+    if @mods.discord.on
+      percent *= 1.3
+      percent_hs *= 1.3
+    if @mods.nanoboost_def.on or @mods.take_a_breather.on or @mods.fortify.on
+      percent *= 0.5 
+      percent_hs *= 0.5 
+    @factor = percent_hs / 100
+    @factor_mb = percent / 100
 
   obj

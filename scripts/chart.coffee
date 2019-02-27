@@ -154,6 +154,7 @@ class WeaponData
     shot_spacing = timescale * (@weapon.burst?.delay or @weapon.shot_time)
     @filling = @weapon.filling or 0.5
     @is_beam = @weapon.type is "beam"
+    @is_beam_or_melee = @weapon.type is "beam" or @weapon.type is "melee"
     @color = @weapon.hero.color
     @segments_factor = (@weapon.damage.segments or 1)
 
@@ -228,11 +229,12 @@ class WeaponData
 
   calculate_shots_damage: ->
     @height = 0
-    @hit_dmg = @basic_dmg*modificator.factor
+    @hit_dmg = @basic_dmg * if @is_beam_or_melee then modificator.factor_mb else modificator.factor 
+  
     @crit_dmg = @hit_dmg * @weapon.crit_factor
     if modificator.mods.armor.on
       for key in ['hit_dmg', 'crit_dmg']
-        @[key] = modificator.mods.armor.func @[key]
+        @[key] = modificator.mods.armor.func @[key], @is_beam
     total_dmg = 0
     @rhkt = undefined
     for shot, index in @shots
@@ -293,12 +295,12 @@ class BioticRifleWeaponData extends WeaponData
 class PhotonProjectorWeaponData extends BeamWeaponData
   calculate_shots_damage: ->
     @height = 30
-    @hit_dmg = @basic_dmg * modificator.factor
+    @hit_dmg = @basic_dmg * modificator.factor_mb
     @dmg_levels = []
     for factor in @weapon.damage.dps_factors
       @dmg_levels.push @hit_dmg*factor
     if modificator.mods.armor.on
-      @dmg_levels = (modificator.mods.armor.func(dmg) for dmg in @dmg_levels)
+      @dmg_levels = (modificator.mods.armor.func(dmg, no) for dmg in @dmg_levels)
     total_dmg = 0
     @rhkt = undefined
     for shot, index in @shots
@@ -802,6 +804,8 @@ do -> #enemy, crosshair, state_data
 do ->
   set_multiplier_string = ->
     str = "#{@modificator.factor}×"
+    if modificator.mods.ampl_matrix.on
+      str += "/#{@modificator.factor_mb}×"
     if modificator.mods.armor.on
       str += " – armor"
     d3.select('.mod-result').text str

@@ -53,6 +53,10 @@
       color: "#7c8f7b",
       role: 'damage'
     },
+    Baptiste: {
+      color: "#5f9985",
+      role: 'healer'
+    },
     Brigitte: {
       color: "#be736e",
       role: 'healer'
@@ -404,7 +408,7 @@
     7]
       },
       fire_rate: 8, //shots/sec
-      ammo: 25,
+      ammo: 35,
       reload_time: 2 //sec
     // Bastion Sentry
     },
@@ -420,7 +424,12 @@
     55]
       },
       spread: {
-        angle: 3
+        max_angle: 3.0 * 0.67, // Reversed spread
+        min_angle: 3.0,
+        spreading_ammo_range: [
+          5,
+          10 // CHECK
+        ]
       },
       fire_rate: 30, //shots/sec
       ammo: 300,
@@ -546,10 +555,10 @@
       mousebutton: 'M2',
       type: "hitscan",
       damage: {
-        dpshot: [45,
-    13.5],
-        falloff: [18,
-    30]
+        dpshot: [50,
+    25],
+        falloff: [20,
+    40]
       },
       spread: {
         angle: 6.50
@@ -568,7 +577,7 @@
       type: "beam",
       velocity: 20, //m/sec
       damage: {
-        dps: 45, //hp/sec
+        dps: 55, //hp/sec
         max_range: 10 //m
       },
       ammo_usage: 20, //shots/sec
@@ -599,8 +608,8 @@
       icon_url: "hero-icons/soldier-rifle.png",
       type: "hitscan",
       damage: {
-        dpshot: [19,
-    9.5],
+        dpshot: [20,
+    10],
         falloff: [30,
     55]
       },
@@ -874,7 +883,30 @@
       ammo: 14,
       fire_rate: 1.25, //shots/sec
       reload_time: 1.5, //sec
-      crit_factor: 1 // Brigitte
+      crit_factor: 1 // Baptiste
+    },
+    {
+      name: "Biotic launcher",
+      hero: this.heros.Baptiste,
+      icon_url: "hero-icons/baptiste-launcher.png",
+      // mousebutton: 'M1'
+      type: "hitscan",
+      damage: {
+        dpshot: [25,
+    12.5],
+        falloff: [
+          20,
+          40 //# CHECK
+        ]
+      },
+      burst: {
+        ammo: 3,
+        delay: 0.1 //s
+      },
+      fire_rate: 1.5, //burst/sec
+      ammo: 45,
+      reload_time: 1.5 //sec 
+    // Brigitte
     },
     {
       name: "Rocket Flail",
@@ -1069,7 +1101,7 @@
   for (k = 0, len2 = ref2.length; k < len2; k++) {
     weapon = ref2[k];
     (function(w) {
-      var angle_rad_func, as, cx, cz, func, range, ref3, ref4, tan, unit_shifts, uy;
+      var angle_rad_func, as, cx, cz, func, min_angle, range, ref3, ref4, tan, unit_shifts, uy;
       w.visible = true;
       w.idString = w.name.replace(/[ \(\):\']/g, '-');
       if (w.type === "arc projectile") {
@@ -1174,7 +1206,8 @@
               };
             case ((ref5 = w.spread) != null ? ref5.max_angle : void 0) == null:
               range = w.spread.spreading_ammo_range;
-              angle_rad_func = ramp([w.spread.max_angle / 180 * Math.PI, 0], [w.ammo - range[1], w.ammo - range[0]]);
+              min_angle = w.spread.min_angle / 180 * Math.PI || 0;
+              angle_rad_func = ramp([w.spread.max_angle / 180 * Math.PI, min_angle], [w.ammo - range[1], w.ammo - range[0]]);
               return function(distance) {
                 return function(ammo, t) {
                   return distance * Math.tan(angle_rad_func(ammo) / 2);
@@ -1260,14 +1293,17 @@
   this.modificator = (function() {
     var mod, obj;
     obj = {
-      factor: 1
+      factor: 1,
+      factor_mb: 1
     };
     obj.mods = {
       armor: {
         color: "#fac50e", //@heros.Torbjorn.color
-        func: function(dmg) {
-          if (dmg > 10) {
-            return dmg - 5;
+        func: function(dmg, isBeam = false) {
+          if (isBeam) {
+            return dmg * 0.8;
+          } else if (dmg > 6) {
+            return dmg - 3;
           } else {
             return dmg / 2;
           }
@@ -1275,6 +1311,12 @@
       },
       nanoboost_def: {
         color: this.heros.Ana.color
+      },
+      take_a_breather: {
+        color: "#f8eb00"
+      },
+      fortify: {
+        color: this.heros.Orisa.color
       },
       damage_boost: {
         color: this.heros.Pharah.color
@@ -1284,6 +1326,9 @@
       },
       nanoboost_off: {
         color: this.heros.Ana.color
+      },
+      ampl_matrix: {
+        color: "#75bfea"
       },
       discord: {
         color: "#7b539c"
@@ -1297,7 +1342,7 @@
       obj.mod_list.push(mod);
     }
     obj.refresh_factor = function() {
-      var percent;
+      var percent, percent_hs;
       percent = 100;
       if (this.mods.damage_boost.on) {
         percent += 30;
@@ -1308,13 +1353,20 @@
       if (this.mods.nanoboost_off.on) {
         percent += 50;
       }
+      percent_hs = percent;
+      if (this.mods.ampl_matrix.on) {
+        percent_hs *= 2;
+      }
       if (this.mods.discord.on) {
         percent *= 1.3;
+        percent_hs *= 1.3;
       }
-      if (this.mods.nanoboost_def.on) {
+      if (this.mods.nanoboost_def.on || this.mods.take_a_breather.on || this.mods.fortify.on) {
         percent *= 0.5;
+        percent_hs *= 0.5;
       }
-      return this.factor = percent / 100;
+      this.factor = percent_hs / 100;
+      return this.factor_mb = percent / 100;
     };
     return obj;
   })();
