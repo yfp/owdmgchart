@@ -98,7 +98,8 @@ for name of @heros
   damage:
     dpshot: 75
     max_range: 5 #m
-  fire_rate: 1/0.9 #swings/sec
+  charge_delay: 0.42#sec
+  fire_rate: 1/0.95 #swings/sec
 , # Roadhog M1
   name: "Scrap Gun (primary)"
   hero: @heros.Roadhog
@@ -214,9 +215,10 @@ for name of @heros
   spread:
     max_angle: 1.85
     spreading_ammo_range: [2, 7]
+  # charge_delay: 0.5#sec
   fire_rate: 4#shots/sec
   ammo: 12
-  reload_time: 4.25 #sec
+  reload_time: 0.5+0.25*12 #sec
 , # Ashe M2
   name: "The Viper (secondary)"
   hero: @heros.Ashe
@@ -228,7 +230,7 @@ for name of @heros
     falloff: [30, 50]
   fire_rate: 1/0.7 #shots/sec
   ammo: 12
-  reload_time: 4.25 #sec
+  reload_time: 0.5+0.25*12 #sec
 , # Bastion Recon
   name: "Configuration: Recon"
   hero: @heros.Bastion
@@ -379,7 +381,7 @@ for name of @heros
   velocity: 115#m/sec
   damage: dpshot: 75
   fire_rate: 1/0.8#shots/sec
-  ammo: 10
+  ammo: 200/20
   charge_delay: 0.4#sec
   reload_time: 1.5 #sec
 , # Pharah
@@ -502,7 +504,7 @@ for name of @heros
       [-1.167,  0.885]
     ]
   fire_rate: 1/0.6 #shots/sec
-  ammo: 6
+  ammo: 18/3
   reload_time: 2#sec
 , # Torbjorn hammer
   name: "Forge Hammer"
@@ -511,8 +513,9 @@ for name of @heros
   type: "melee"
   damage:
     dpshot: 55
-    max_range: 3#m  
-  fire_rate: 1.25 #shots/sec
+    max_range: 2.5#m
+  charge_delay: 0.35#sec  
+  fire_rate: 1/0.85 #shots/sec
 , # Tracer
   name: "Pulse Pistols"
   hero: @heros.Tracer
@@ -525,7 +528,7 @@ for name of @heros
   spread:
     max_angle: 3.6
     spreading_ammo_range: [3, 6]  #CHECK
-  ammo: 20
+  ammo: 40/2
   fire_rate: 20#shots/sec
   reload_time: 1.15 #sec
 , # Widowmaker M1
@@ -551,9 +554,9 @@ for name of @heros
   type: "hitscan"
   damage: dpshot: 120
   ammo: 30/3
-  fire_rate: 1/1.25#shots/sec
+  fire_rate: 1/(0.5+0.75)#shots/sec
   charge_delay: 0.75#sec
-  reload_time: 1.55 #sec
+  reload_time: 1.55+0.33 #sec
   crit_factor: 2.5
 , # Ana M1
   name: "Biotic Rifle (primary)"
@@ -564,7 +567,7 @@ for name of @heros
   velocity: 90#m/sec
   damage:
     dpshot: 70
-    duration: 0.79#sec
+    duration: 0.6#sec
     segments: 4
   ammo: 14
   fire_rate: 1.25#shots/sec
@@ -582,7 +585,7 @@ for name of @heros
     segments: 4
   ammo: 14
   fire_rate: 1.25#shots/sec
-  reload_time: 1.5 #sec
+  reload_time: 1.5+0.5 #sec
   crit_factor: 1
 , # Baptiste
   name: "Biotic launcher"
@@ -592,11 +595,11 @@ for name of @heros
   type: "hitscan"
   damage:
     dpshot:  [25, 12.5]
-    falloff: [20, 40]  ## CHECK
+    falloff: [25, 45]  ## CHECK
   burst:
     ammo: 3
     delay: 0.1#s
-  fire_rate: 1/0.65#burst/sec
+  fire_rate: 1/(2*0.1+0.36)#burst/sec
   ammo: 45
   reload_time: 1.5#sec 
 , # Brigitte
@@ -607,6 +610,7 @@ for name of @heros
   damage:
     dpshot: 35
     max_range: 6#m
+  charge_delay: 0.2#sec
   fire_rate: 1/0.6#shots/sec
 , # Lucio 
   name: "Sonic Amplifier"
