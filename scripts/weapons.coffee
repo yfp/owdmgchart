@@ -24,6 +24,7 @@ ramp = (values, args) ->
   Brigitte:     color: "#be736e", role: 'healer'
   Dva:          color: "#ed93c7", role: 'tank'
   Doomfist:     color: "#815049", role: 'damage'
+  Echo:         color: "#4cc4e8", role: 'damage', icon_url: 'hero-icons-svg/echo.svg'
   Genji:        color: "#97ef43", role: 'damage'
   Hanzo:        color: "#b9b48a", role: 'damage'
   Junkrat:      color: "#ecbd53", role: 'damage'
@@ -84,7 +85,7 @@ for name of @heros
   hero: @heros.Orisa
   icon_url: "hero-icons/orisa-driver.png"
   type: "linear projectile"
-  damage: dpshot: 11
+  damage: dpshot: 10
   velocity: 90 #m/s
   spread: angle: 1.2
   fire_rate: 12 #shots/sec
@@ -201,7 +202,7 @@ for name of @heros
   damage:
     dpshot: 47
   fire_rate: 1#shot/sec
-  ammo: 4
+  ammo: 100/20
   reload_time: 1.6 #sec
 , # Ashe M1
   name: "The Viper (primary)"
@@ -214,10 +215,10 @@ for name of @heros
     falloff: [20, 40]
   spread:
     max_angle: 1.85
-    spreading_ammo_range: [2, 7]
+    spreading_ammo_range: [2, 6]
   # charge_delay: 0.5#sec
   fire_rate: 4#shots/sec
-  ammo: 12
+  ammo: 15
   reload_time: 0.5+0.25*12 #sec
 , # Ashe M2
   name: "The Viper (secondary)"
@@ -229,7 +230,7 @@ for name of @heros
     dpshot:  [85, 42.5]
     falloff: [30, 50]
   fire_rate: 1/0.7 #shots/sec
-  ammo: 12
+  ammo: 15
   reload_time: 0.5+0.25*12 #sec
 , # Bastion Recon
   name: "Configuration: Recon"
@@ -278,6 +279,24 @@ for name of @heros
   reload_time: 0.65#sec
   dps_period_base: 1/3
   dps_period_add: 0.65
+, # Echo  30/2560*103
+  name: "Tri-Shot"
+  hero: @heros.Echo
+  icon_url: "hero-icons/echo-trishot.png"
+  type: "projectile shotgun"
+  velocity: 75 #m/s
+  pellets: 3
+  spread:
+    randomly_rotated: no
+    constant_angles:[
+      [-0.6, -0.346]
+      [0, 0.692]
+      [0.6, -0.346]
+    ]
+  damage: dpshot: 17
+  ammo: 15
+  fire_rate: 3 #shots/sec
+  reload_time: 1.5#sec
 , # Genji M1
   name: "Shuriken"
   hero: @heros.Genji
@@ -286,7 +305,7 @@ for name of @heros
   type: "linear projectile"
   velocity: 60#m
   damage: dpshot:  28
-  ammo: 24
+  ammo: 30
   fire_rate: 1.027 #bursts/sec
   burst:
     ammo: 3
@@ -308,8 +327,8 @@ for name of @heros
       [0, 0]
       [15, 0]
     ]
-  ammo: 24/3
-  fire_rate: 1.33#shots/sec
+  ammo: 30/3
+  fire_rate: 1/0.65#shots/sec
   reload_time: 1.5 #sec
 , # Hanzo
   name: "Storm Bow"
@@ -370,7 +389,7 @@ for name of @heros
     max_range: 10#m
   ammo_usage: 20#shots/sec
   tick_rate:  20#ticks/sec
-  ammo: 200
+  ammo: 120
   reload_time: 1.5 #sec
 , # Mei M2
   name: "Icicle"
@@ -381,7 +400,7 @@ for name of @heros
   velocity: 115#m/sec
   damage: dpshot: 75
   fire_rate: 1/0.8#shots/sec
-  ammo: 200/20
+  ammo: 120/10
   charge_delay: 0.4#sec
   reload_time: 1.5 #sec
 , # Pharah
@@ -459,7 +478,7 @@ for name of @heros
   mousebutton: 'M2'
   type: "projectile"
   velocity: 25#m/s
-  damage: dpshot: 120  # 6-60
+  damage: dpshot: 140  # 6-60
   fire_rate: 1/(1+0.55) # shots/sec  0.2-1 sec = 0.063
   charge_delay: 1#sec  
   ammo: 10  #1-10 rounds 70 total
@@ -554,8 +573,8 @@ for name of @heros
   type: "hitscan"
   damage: dpshot: 120
   ammo: 30/3
-  fire_rate: 1/(0.5+0.75)#shots/sec
-  charge_delay: 0.75#sec
+  fire_rate: 1/(0.5+0.9)#shots/sec
+  charge_delay: 0.9#sec
   reload_time: 1.55+0.33 #sec
   crit_factor: 2.5
 , # Ana M1
@@ -599,7 +618,7 @@ for name of @heros
   burst:
     ammo: 3
     delay: 0.1#s
-  fire_rate: 1/(2*0.1+0.36)#burst/sec
+  fire_rate: 1/(2*0.1+0.45)#burst/sec
   ammo: 45
   reload_time: 1.5#sec 
 , # Brigitte
@@ -896,3 +915,8 @@ for weapon in @weapons
     @factor_mb = percent / 100
 
   obj
+
+# for weapon in @weapons
+#   weapon.visible = no
+
+# @weapon_dict["Tri-Shot"].visible = yes
