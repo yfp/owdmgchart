@@ -270,10 +270,12 @@ aside{
 
 .enemy-viewport{
   min-width: 320px;
+  position: relative;
 }
 
 header{
   margin: 3px 0px 3px 3px;
+  position: relative;
 }
 
 header img{
@@ -346,14 +348,28 @@ input.distance-input{
 }
 
 .figure_chart_help{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
   /*background-color: #abe6f2;*/
-  height: 20px;
-  margin-top: -30px;
-  padding-right: 20px;
+  /*border: 1px black solid;*/
+  height: 30px;
+  padding-right: 10px;
   color: #fff;
-  text-align: right;
   text-shadow: 0 0 5px #abe6f2;
 }
+
+.patch_info{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  margin-bottom: -10px;
+  padding-right: 5px;
+  color: #888;
+  font-family: monospace;
+  font-size: 8px;
+}
+
 
 svg.figure_chart{
   height: 320px;

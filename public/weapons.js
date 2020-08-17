@@ -260,8 +260,8 @@
       type: "projectile shotgun",
       pellets: 25,
       damage: {
-        dpshot: [6,
-    1.8],
+        dpshot: [7,
+    2.1],
         falloff: [15,
     30]
       },
@@ -269,8 +269,8 @@
         angle: 20.1
       },
       velocity: 80, //m/s
-      fire_rate: 1 / 0.7, //shots/sec
-      ammo: 6,
+      fire_rate: 1 / 0.85, //shots/sec
+      ammo: 5,
       reload_time: 2 //sec
     // Roadhog M2
     },
@@ -283,8 +283,8 @@
       pellets: [1,
     25],
       damage: {
-        dpshot: [6,
-    1.8],
+        dpshot: [7,
+    2.1],
         falloff: [23,
     38],
         dpshot_ball: 50,
@@ -295,8 +295,8 @@
       },
       velocity: 80, //m/s
       crit_factor: 2,
-      fire_rate: 1 / 0.7, //shots/sec
-      ammo: 6,
+      fire_rate: 1 / 0.85, //shots/sec
+      ammo: 5,
       reload_time: 1.5, //sec
       charge_delay: 0.143 //sec
     // Sigma 
@@ -462,11 +462,11 @@
     50]
       },
       spread: {
-        max_angle: 3.0 * 0.67, // Reversed spread
-        min_angle: 3.0,
+        max_angle: 2.7,
+        min_angle: 1.8,
         spreading_ammo_range: [
-          5,
-          10 // CHECK
+          10,
+          40 // CHECK
         ]
       },
       fire_rate: 30, //shots/sec
@@ -553,15 +553,15 @@
       },
       spread: {
         randomly_rotated: false,
-        constant_angles: [[-15,
+        constant_angles: [[-9,
     0],
     [0,
     0],
-    [15,
+    [9,
     0]]
       },
       ammo: 30 / 3,
-      fire_rate: 1 / 0.65, //shots/sec
+      fire_rate: 1 / 0.75, //shots/sec
       reload_time: 1.5 //sec
     // Hanzo
     },
@@ -1056,10 +1056,10 @@
       },
       burst: {
         ammo: 5,
-        delay: 0.118 //sec   #   CHECK
+        delay: 1 / 9 //sec   #   CHECK
       },
-      charge_delay: 3.616, //sec
-      fire_rate: 1 / 4.67167, //burst/sec
+      charge_delay: 3.216, //sec
+      fire_rate: 1 / 4.27167, //burst/sec
       ammo: 20,
       reload_time: 2 //sec
     }

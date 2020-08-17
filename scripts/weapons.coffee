@@ -109,12 +109,12 @@ for name of @heros
   type: "projectile shotgun"
   pellets: 25
   damage:
-    dpshot:  [6, 1.8]
+    dpshot:  [7, 2.1]
     falloff: [15, 30]
   spread: angle: 20.1
   velocity: 80 #m/s
-  fire_rate: 1/0.7 #shots/sec
-  ammo: 6
+  fire_rate: 1/0.85 #shots/sec
+  ammo: 5
   reload_time: 2 #sec
 , # Roadhog M2
   name: "Scrap Gun (secondary)"
@@ -124,15 +124,15 @@ for name of @heros
   type: "linear projectile/shotgun"
   pellets: [1, 25]
   damage:
-    dpshot:  [6, 1.8]
+    dpshot:  [7, 2.1]
     falloff: [23, 38]
     dpshot_ball: 50
     range_ball: 8#m
   spread: angle: 20.1
   velocity: 80 #m/s
   crit_factor: 2
-  fire_rate: 1/0.7 #shots/sec
-  ammo: 6
+  fire_rate: 1/0.85 #shots/sec
+  ammo: 5
   reload_time: 1.5 #sec
   charge_delay: 0.143 #sec
 , # Sigma 
@@ -255,9 +255,9 @@ for name of @heros
     dpshot:  [15, 7.5]
     falloff: [30, 50]
   spread:
-    max_angle: 3.0*0.67 # Reversed spread
-    min_angle: 3.0
-    spreading_ammo_range: [5, 10] # CHECK
+    max_angle: 2.7
+    min_angle: 1.8
+    spreading_ammo_range: [10, 40] # CHECK
   fire_rate: 30 #shots/sec
   ammo: 300
   reload_time: 2.1 #sec
@@ -323,12 +323,12 @@ for name of @heros
   spread:
     randomly_rotated: no
     constant_angles:[
-      [-15, 0]
+      [-9, 0]
       [0, 0]
-      [15, 0]
+      [9, 0]
     ]
   ammo: 30/3
-  fire_rate: 1/0.65#shots/sec
+  fire_rate: 1/0.75#shots/sec
   reload_time: 1.5 #sec
 , # Hanzo
   name: "Storm Bow"
@@ -686,9 +686,9 @@ for name of @heros
   damage: dpshot: 48
   burst:
     ammo: 5
-    delay: 0.118#sec   #   CHECK
-  charge_delay: 3.616#sec
-  fire_rate: 1/4.67167#burst/sec
+    delay: 1/9#sec   #   CHECK
+  charge_delay: 3.216#sec
+  fire_rate: 1/4.27167#burst/sec
   ammo: 20
   reload_time: 2#sec
 ]
