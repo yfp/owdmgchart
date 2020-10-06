@@ -109,7 +109,7 @@ for name of @heros
   type: "projectile shotgun"
   pellets: 25
   damage:
-    dpshot:  [7, 2.1]
+    dpshot:  [ 6,  6*0.3]
     falloff: [15, 30]
   spread: angle: 20.1
   velocity: 80 #m/s
@@ -124,7 +124,7 @@ for name of @heros
   type: "linear projectile/shotgun"
   pellets: [1, 25]
   damage:
-    dpshot:  [7, 2.1]
+    dpshot:  [ 6,  6*0.3]
     falloff: [23, 38]
     dpshot_ball: 50
     range_ball: 8#m
@@ -202,7 +202,7 @@ for name of @heros
   damage:
     dpshot: 47
   fire_rate: 1#shot/sec
-  ammo: 100/20
+  ammo: 100/25
   reload_time: 1.6 #sec
 , # Ashe M1
   name: "The Viper (primary)"
@@ -218,7 +218,7 @@ for name of @heros
     spreading_ammo_range: [2, 6]
   # charge_delay: 0.5#sec
   fire_rate: 4#shots/sec
-  ammo: 15
+  ammo: 12
   reload_time: 0.5+0.25*12 #sec
 , # Ashe M2
   name: "The Viper (secondary)"
@@ -227,10 +227,10 @@ for name of @heros
   mousebutton: 'M2'
   type: "hitscan"
   damage:
-    dpshot:  [85, 42.5]
+    dpshot:  [80, 80*0.5]
     falloff: [30, 50]
   fire_rate: 1/0.7 #shots/sec
-  ammo: 15
+  ammo: 12
   reload_time: 0.5+0.25*12 #sec
 , # Bastion Recon
   name: "Configuration: Recon"
@@ -347,7 +347,7 @@ for name of @heros
   icon_url: "hero-icons/junkrat-launcher.png"
   type: "arc projectile"
   velocity: 25#m/sec
-  damage: dpshot:  130
+  damage: dpshot:  120
   ammo: 5
   fire_rate: 1/0.65 #shots/sec
   reload_time: 1.55#sec
@@ -361,7 +361,7 @@ for name of @heros
     dpshot:  [70, 35]
     falloff: [20, 40]
   ammo: 6
-  fire_rate: 1/0.42#shots/sec
+  fire_rate: 1/0.50#shots/sec
   reload_time: 1.5 #sec
 , # McCree M2
   name: "Fan the Hammer"
@@ -413,7 +413,7 @@ for name of @heros
   damage: dpshot: 120
   crit_factor: 1
   ammo: 6
-  fire_rate: 1/0.75#shots/sec
+  fire_rate: 1/0.85#shots/sec
   reload_time: 1.5 #sec
 , # Reaper
   name: "Hellfire Shotguns"
@@ -478,7 +478,7 @@ for name of @heros
   mousebutton: 'M2'
   type: "projectile"
   velocity: 25#m/s
-  damage: dpshot: 140  # 6-60
+  damage: dpshot: 120  # 6-60
   fire_rate: 1/(1+0.55) # shots/sec  0.2-1 sec = 0.063
   charge_delay: 1#sec  
   ammo: 10  #1-10 rounds 70 total
@@ -506,10 +506,10 @@ for name of @heros
   pellets: 10
   velocity: 120#m/sec
   damage:
-    dpshot: [10.5,  3.15]
+    dpshot: [12.5, 12.5*0.3]
     falloff:[10,   20]
   spread:
-    randomly_rotated: yes
+    randomly_rotated: no
     constant_angles: [
       [ 0.000,  0.362]
       [-0.644,  3.098]
@@ -522,7 +522,7 @@ for name of @heros
       [ 0.966,  0.805]
       [-1.167,  0.885]
     ]
-  fire_rate: 1/0.6 #shots/sec
+  fire_rate: 1/0.8 #shots/sec
   ammo: 18/3
   reload_time: 2#sec
 , # Torbjorn hammer
@@ -562,7 +562,7 @@ for name of @heros
   spread:
     max_angle: 3.0
     spreading_ammo_range: [3, 6]  #CHECK
-  ammo: 30
+  ammo: 35
   fire_rate: 10#shots/sec
   reload_time: 1.55 #sec
 , # Widowmaker M2
@@ -571,8 +571,10 @@ for name of @heros
   icon_url: "hero-icons/widowmaker-rifle.png"
   mousebutton: 'M2'
   type: "hitscan"
-  damage: dpshot: 120
-  ammo: 30/3
+  damage:
+    dpshot:  [120, 60]
+    falloff: [ 60, 85]
+  ammo: 35/5
   fire_rate: 1/(0.5+0.9)#shots/sec
   charge_delay: 0.9#sec
   reload_time: 1.55+0.33 #sec
@@ -588,7 +590,7 @@ for name of @heros
     dpshot: 70
     duration: 0.6#sec
     segments: 4
-  ammo: 14
+  ammo: 12
   fire_rate: 1.25#shots/sec
   reload_time: 1.5 #sec
   crit_factor: 1
@@ -602,7 +604,7 @@ for name of @heros
     dpshot: 70
     duration: 0.6#sec
     segments: 4
-  ammo: 14
+  ammo: 12
   fire_rate: 1.25#shots/sec
   reload_time: 1.5+0.5 #sec
   crit_factor: 1
